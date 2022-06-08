@@ -32,6 +32,7 @@ int main(){
    int x,y;
    cin>>E>>V;
    color.resize(V,0);
+   G.resize(V);
    for(int i=0;i<E;++i)
    {
        cin>>x>>y;
