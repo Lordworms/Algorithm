@@ -27,7 +27,6 @@ public:
         int cnt=0;
         for(auto& a:edges)
         {
-            
             fa[getFa(a[0])]=getFa(a[1]);
             int fx=getFa(0);
             int fy=getFa(n-1);
