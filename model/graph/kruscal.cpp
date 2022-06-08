@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int MAXN=30;
+//简单，不需要写板子
 struct Edge{
     int u,v,next;
 };
