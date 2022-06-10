@@ -19,7 +19,7 @@ private:
 public:
     int countPalindromicSubsequences(string s) {
         int n=s.size();
-        vector<vector<int>>dp(n,vector<int>(n,0));
+        vector<vector<int>>dp(n-1,vector<int>(n-1,0));
         for(int i=0;i<n;++i)
         {
             dp[i][i]=1;
@@ -44,9 +44,9 @@ public:
             }
             pos[s[i]-'a']=i;
         }
-        for(int len=2;len<=n;++len)//区间dp的模版for循环
+        for(int len=2;len<n;++len)//区间dp的模版for循环
         {
-            for(int i=0;i+len<=n;++i)
+            for(int i=0;i+len<n;++i)
             {
                 int j=i+len-1;
                 if(s[i]==s[j])
