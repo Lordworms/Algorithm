@@ -49,7 +49,7 @@ int KM()
       for(int j=0;j<cnty;++j)
       {
          if(mp[i][j]==-1)continue;
-         wx[i]=max(wx[i],mp[i][j]);
+         wx[i]=max(wx[i],mp[i][j]);//初始化标杆的值为该点所出去的边的最大值
       }
    }
    for(int i=0;i<cntx;++i)//枚举X部分的点
