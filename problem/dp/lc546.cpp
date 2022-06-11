@@ -28,20 +28,22 @@ public:
         if(l>r)return 0;
         if(dp[l][r][k]==0)
         {
-            dp[l][r][k]=getAns(l,r-1,k+1);
-        }
-        for(int i=l;i<r;++i)
-        {
-            if(boxes[r]==boxes[i])
+            dp[l][r][k]=getAns(l,r-1,0)+(k+1)*(k+1);
+        
+            for(int i=l;i<r;++i)
             {
-                dp[l][r][k]=max(dp[l][r][k],getAns(l,i,k+1)+getAns(i+1,r,0));
+                if(boxes[r]==boxes[i])
+                {
+                    dp[l][r][k]=max(dp[l][r][k],getAns(l,i,k+1)+getAns(i+1,r-1,0));
+                }
             }
         }
         return dp[l][r][k];
     }
     int removeBoxes(vector<int>& boxes) {
         this->boxes=boxes;
-        return getAns(0,boxes.size(),0);
+        memset(dp,0,sizeof(dp));
+        return getAns(0,boxes.size()-1,0);
     }
 };
 int main()
@@ -50,6 +52,6 @@ int main()
   cin.tie(nullptr);
   Solution sol;
   vector<int>boxes={1,3,2,2,2,3,4,3,1};
-  cout<<sol.removeBoxes(boxes);
+  int x=sol.removeBoxes(boxes);
   return 0;
 }
