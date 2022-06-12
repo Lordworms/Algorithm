@@ -1,55 +1,41 @@
 /*
-    题面：给出一些不同颜色的盒子 boxes ，盒子的颜色由不同的正数表示。
+    题面：给出两个整数 n 和 k，找出所有包含从 1 到 n 的数字，且恰好拥有 k 个逆序对的不同的数组的个数。
+         逆序对的定义如下：对于数组的第i个和第 j个元素，如果满i < j且 a[i] > a[j]，则其为一个逆序对；否则不是。
+    
+    题解：定义dp[i][j]为当前使用前i个数字，切正好凑成j个逆序对的情况的数组个数，那么思考对于第i个数字来说，它有i-1个插入位置，设为k
+    每个插入位置可以带来i-1-k个逆序对，其中和第i个数不相关的逆序对数量为j-(i-1-k)个，所以容易写出我们的转移方程
+        dp[i][j]=求和dp[i-1][j-(i-1-k)]=dp[i-1][j+k+1-i]那么就是我们的答案了
+        这里可以做一些优化用
 
-你将经过若干轮操作去去掉盒子，直到所有的盒子都去掉为止。每一轮你可以移除具有相同颜色的连续 k 个盒子（k >= 1），这样一轮之后你将得到 k * k 个积分。
-
-返回 你能获得的最大积分和 。
-
-    题解：容易看出这是个区间dp问题，那么我们就很容易用dp[i][j]表示区间[i,j]内可以获得的最大积分，但是区间内可以获得的最大积分并不只依赖于子序列，
-    还依赖于我们对于其移动的这个位置（因为要合并），所以我们得用第三维来表示这个值的影响
-    {6,3,6,5,6,7,6,6,8,6}
-    对于我们的这个序列，我们用dp[i][j][k]表示删除i-j区间和之后与a[j]相等的k个元素能够获得的最大值
-    那么对于我们{6,3,6,5,6}这个区间来说，我们可以做如下两种策略：
-    1.先移除最后的4个6，然后再管前面的dp[i][j][k]=dp[i][j-1]+(k+1)^2
-    2.找到区间内和j位置相等的值,设为q，先移除右半部分，再移除左半部分。然后dp[i][j][k]=max(dp[i][j][k],dp[i][q][k+1]+dp[q+1][j-1][0])
 
 */
-
 #include <bits/stdc++.h>
 using namespace std;
-class Solution {
-private:
-    static const int MAXN=101;
-    int dp[MAXN][MAXN][MAXN];
-    vector<int>boxes;
-public:
-    int getAns(int l,int r,int k)
-    {   
-        if(l>r)return 0;
-        if(dp[l][r][k]==0)
+    double calculateTax(vector<vector<int>>& brackets, int income) {
+        double ans=0;
+        int now=0,n=brackets.size();
+        for(int i=0;i<n;++i)
         {
-            dp[l][r][k]=getAns(l,r-1,k+1);
-        }
-        for(int i=l;i<r;++i)
-        {
-            if(boxes[r]==boxes[i])
+            if(income>brackets[i][0])
             {
-                dp[l][r][k]=max(dp[l][r][k],getAns(l,i,k+1)+getAns(i+1,r,0));
+                ans+=(double)(brackets[i][0]-now)*(double)brackets[i][1]/100;
+                now=brackets[i][0];
+                
+            }
+            else if(income<brackets[i][0])
+            {
+                 ans+=(double)(income-now)*(double)brackets[i][1];
+                now+=brackets[i][0]-income;
+                break;
             }
         }
-        return dp[l][r][k];
+        return ans;
     }
-    int removeBoxes(vector<int>& boxes) {
-        this->boxes=boxes;
-        return getAns(0,boxes.size(),0);
-    }
-};
 int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
-  Solution sol;
-  vector<int>boxes={1,3,2,2,2,3,4,3,1};
-  cout<<sol.removeBoxes(boxes);
+  vector<vector<int>>arr={{1,33}};
+  cout<<calculateTax(arr,1);
   return 0;
 }
