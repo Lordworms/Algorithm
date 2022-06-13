@@ -17,6 +17,7 @@
     3.go-kit(微服务框架：订阅发布模式)
 5.配置中心
     1.nacos
+        nacos需要配置四个东西，即：endpoint, namespaceId, accessKey, secretKey
     2.acm
 6.容器技术及相关
     1.docker
@@ -26,3 +27,5 @@
 8.测试
     1.单元测试
     2.mock测试
+9.运维
+    1.opensadmin运维管理系统
