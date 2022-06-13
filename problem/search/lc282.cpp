@@ -2,7 +2,7 @@
     题面：给定一个仅包含数字 0-9 的字符串 num 和一个目标值整数 target ，在 num 的数字之间添加 二元 运算符（不是一元）+、- 或 * ，返回 所有 能够得到 target 的表达式。
          注意，返回表达式中的操作数 不应该 包含前导零。
 
-    题解：注意这里别直接搜，用for循环搜，便于找到上一个值,一定要好好理解！！！！！！！
+
 
 */
 #include <bits/stdc++.h>
@@ -11,39 +11,44 @@ class Solution {
 private:
     typedef unsigned long long ll;
     int n;
+    string tmp;
+    int com;
     vector<string>ans;
-    string num;
-    int target;
 public:
-    void dfs(int pos,ll pre,ll cur,string ss)
+    void dfs(string& num,int & target,int pos,ll val)
     {
         if(pos==n)
         {
-            if(cur==target)
-            ans.push_back(ss);
+            if(val==target)ans.push_back(tmp);
             return;
         }
-        for(int i=pos;i<n;++i)
+        for(int i=0;i<3;++i)
         {
-            if(i!=pos&&num[pos]=='0')break;//去除前导0的聪明方式
-            string k=num.substr(pos,i-pos+1);
-            long next=stol(k);
-            if(pos==0)dfs(i+1,next,cur+next,(string)""+k);
+            if(i==0)
+            {
+                tmp.push_back('+'),tmp.push_back(num[pos]);
+                com+=(num[pos]-'0');
+                dfs(num,target,pos+1,val+com);
+            }
+            else if(i==2)
+            {
+                tmp.push_back('-'),tmp.push_back(num[pos]);
+                com=-num[pos];
+                dfs(num,target,pos+1,val+com);
+            }
             else
             {
-                
-                dfs(i+1,next,cur+next,ss+"+"+k);
-                dfs(i+1,-next,cur-next,ss+"-"+k);
-                ll x=pre*next;
-                dfs(i+1,x,cur-pre+x,ss+"*"+k);
+                tmp.push_back('*'),tmp.push_back(num[pos]);
+                com*=(num[pos]-'0');
+                dfs(num,target,pos+1,val+com);
             }
+            tmp.pop_back(),tmp.pop_back();
         }
     }
     vector<string> addOperators(string num, int target) {
-        this->n=num.size();
-        this->num=num;
-        this->target=target;
-        dfs(0,0,0,"");
+        tmp+=num[0];
+        com=num[0]-'0';
+        dfs(num,target,1,com);
         return ans;
     }
 };
