@@ -28,7 +28,7 @@ public:
             if(i!=pos&&num[pos]=='0')break;//去除前导0的聪明方式
             string k=num.substr(pos,i-pos+1);
             long next=stol(k);
-            if(pos==0)dfs(i+1,next,cur+next,(string)""+k);
+            if(pos==0)dfs(i+1,next,cur+next,(string)""+k);//为什么是pos==0而不是i==0，这是因为我们找的子串是从pos到i的，如果我们用i==0来表示，那么就会进入下面的搜索中去，那么就会有首部符号
             else
             {
                 
@@ -52,6 +52,6 @@ int main()
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
   Solution sol;
-  sol.addOperators("123",6);
+  sol.addOperators("105",5);
   return 0;
 }
