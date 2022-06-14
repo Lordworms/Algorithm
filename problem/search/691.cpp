@@ -31,7 +31,7 @@ public:
                 if((now>>j&1)&&tmp[target[j]-'a']>0)
                 {
                     tmp[target[j]-'a']--;
-                    pre^=1<<j;
+                    pre^=(1<<j);
                 }
             }
             if(pre<now)
