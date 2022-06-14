@@ -1,0 +1,31 @@
+1. 数据库：(dao,gorm)
+    1.mysql:存静态数据
+    2.redis:缓存
+    3.influxdb：时序数据库
+    4.oss：对象存储，存二进制文件
+2. 消息队列：
+    1.kafka
+    2.rocketMQ
+    3.rabbitMQ;
+3. 微服务网关：
+    1.kong
+    2.nginx
+4.语言框架(go)：
+    1.gin
+    2.echo
+    （路由模式）
+    3.go-kit(微服务框架：订阅发布模式)
+5.配置中心
+    1.nacos
+        nacos需要配置四个东西，即：endpoint, namespaceId, accessKey, secretKey
+    2.acm
+6.容器技术及相关
+    1.docker
+    2.kubernetes
+7.链路追踪
+    1.jager
+8.测试
+    1.单元测试
+    2.mock测试
+9.运维
+    1.opensadmin运维管理系统
