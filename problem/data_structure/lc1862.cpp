@@ -30,7 +30,7 @@ public:
             {
                 for(int d=1;d*y<=maxn;++d)
                 {
-                    ans+=cnt[y]*(h[min((d+1)*y-1,maxn)]-h[d*y-1])*d;//注意右边开区间，所以-1
+                    ans=(ans+cnt[y]*(h[min((d+1)*y-1,maxn)]-h[d*y-1])*d)%MOD;//注意右边开区间，所以-1
                 }
             }
         }

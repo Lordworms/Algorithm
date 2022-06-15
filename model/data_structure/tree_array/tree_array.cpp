@@ -3,6 +3,7 @@ using namespace std;
 const int MAXN=1e5+5;
 int c[MAXN],a[MAXN];
 int n;
+//获得x末尾有多少个0
 int lowbit(int x)
 {
     return x&-x;
