@@ -13,10 +13,6 @@
 */
 package main
 
-import (
-	"fmt"
-)
-
 func minJumps(arr []int) int {
 	n := len(arr)
 	G := map[int][]int{} //存权值相同的子图
@@ -48,9 +44,4 @@ func minJumps(arr []int) int {
 			q = append(q, pair{p.idx - 1, p.step + 1})
 		}
 	}
-}
-func main() {
-	arr := []int{100, -23, -23, 404, 100, 23, 23, 23, 3, 404}
-	fmt.Println(minJumps(arr))
-
 }

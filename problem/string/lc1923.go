@@ -52,7 +52,3 @@ func totalStrength(strength []int) int {
 	}
 	return (ans + MOD) % MOD
 }
-func main() {
-	arr := []int{1, 3, 1, 2}
-	totalStrength(arr)
-}
