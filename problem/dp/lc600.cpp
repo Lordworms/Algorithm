@@ -10,11 +10,29 @@ using namespace std;
 class Solution {
 public:
     int findIntegers(int n) {
-        int dp[32];
+        int dp[31];
         memset(dp,0,sizeof(dp));
         dp[0]=1;
         dp[1]=1;
-        for(int i=2;i<=31;++i)dp[i]=dp[i-1]+dp[i-2];
+        for(int i=2;i<31;++i)dp[i]=dp[i-1]+dp[i-2];
+        int pre=0,cur=0;
+        int ans=0;
+        for(int i=29;i>=0;--i)
+        {
+          int v=(1<<i);
+          if(n&v)
+          {
+            ans+=dp[i+1];
+            if(pre==1)break;
+            pre=1;
+          }
+          else
+          {
+            pre=0;
+          }
+          if(i==0)ans++;
+        }
+      return ans;
     }
 };
 int main()
