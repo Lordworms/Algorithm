@@ -9,37 +9,28 @@
 using namespace std;
 class Solution {
 public:
-    int findIntegers(int n) {
-        int dp[31];
-        memset(dp,0,sizeof(dp));
-        dp[0]=1;
-        dp[1]=1;
-        for(int i=2;i<31;++i)dp[i]=dp[i-1]+dp[i-2];
-        int pre=0,cur=0;
-        int ans=0;
-        for(int i=29;i>=0;--i)
+    int shortestSubarray(vector<int>& nums, int k) {
+        deque<int>q;
+        vector<int>h(nums.size()+1,0);
+        for(int i=1;i<=nums.size();++i)h[i]=h[i-1]+nums[i-1];
+        int ans=INT_MAX;
+        q.push_back(0);
+        for(int i=1;i<=nums.size();++i)
         {
-          int v=(1<<i);
-          if(n&v)
-          {
-            ans+=dp[i+1];
-            if(pre==1)break;
-            pre=1;
-          }
-          else
-          {
-            pre=0;
-          }
-          if(i==0)ans++;
+            //先pop
+            while(!q.empty()&&h[q.back()]>h[i])q.pop_back();
+            while(!q.empty()&&h[i]-h[q.front()]>=k){ans=min(ans,i-q.back());q.pop_front();}
+            q.push_back(i);
         }
-      return ans;
-    }
+        return ans==INT_MAX?-1:ans;
+   }
 };
 int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
   Solution Sol;
-  cout<<Sol.findIntegers(5);
+  vector<int>num={};
+  cout<<Sol.shortestSubarray()
   return 0;
 }
