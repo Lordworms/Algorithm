@@ -36,4 +36,5 @@
 	5.domain，针对服务比较多的情形，如果服务比较少，那么服务写在service层，如果比较多
 	写在domain层： domain层的内逻辑分别为：domain--> 子域-->聚合层-->repo--		>persisitence-->model
 
-	
+6.grpc添加apide流程：
+	1.在xxx.proto文件中添加对应的rpc以及responese、request结构
