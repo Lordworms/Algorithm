@@ -1,1 +1,10 @@
-go kit是一个微服务框架，可以应用于web service以及grpc框架
+1.go kit是一个微服务框架，可以应用于web service以及grpc框架
+Go kit包括三层架构：即Transport Endpoint Service层
+2.每层的功能
+	1.Transport
+	负责和HTTP、GRPC、thrift等相关的逻辑
+	2.Endpoint
+	定义了Request和Response格式，并且可以使用装饰器来包装函数，来实现中间件嵌套
+	3.Service
+	业务类接口
+  可以类比为MVC的三层模型

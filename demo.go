@@ -1,58 +1,59 @@
 /*
-	题意：作为国王的统治者，你有一支巫师军队听你指挥。
-	给你一个下标从 0 开始的整数数组 strength ，其中 strength[i] 表示第 i 位巫师的力量值。对于连续的一组巫师（也就是这些巫师的力量值是 strength 的 子数组），总力量 定义为以下两个值的 乘积 ：
-	巫师中 最弱 的能力值。
-	组中所有巫师的个人力量值 之和 。
-	请你返回 所有 巫师组的 总 力量之和。由于答案可能很大，请将答案对 109 + 7 取余 后返回。
-	子数组 是一个数组里 非空 连续子序列。
+   题意:在大小为 n x n 的网格 grid 上，每个单元格都有一盏灯，最初灯都处于 关闭 状态。
 
-	题解：前缀和的前缀和+单调栈分别处理区间和以及最小值，我们思考某个元素对于总的结果的影响，我们先处理左边的最小值，再处理右边的最小值
-	我们思考，对于某个元素arr[i]来说，其对于区间[L,R]内的子数组的和的影响为
-	∑r=[i+1,R+1]∑l=[L,i](s[r]-s[l])=(i-L+1)∑r=[i+1,R+1](s[r])-(R-i+1)∑l=[L,i](s[l])
-	因此我们还要计算出前缀和的前缀和，来简化这个子数组的影响
-	令ss为前缀和的前缀和，那么上述式子可以改写为
-	(i-L+1)*(ss[R+2]-ss[i+1])+(R-i+1)*(ss[i+1]-ss[L])
-	最后的解就是把每个元素的影响加起来乘上对应的最小值即可
+       给你一个由灯的位置组成的二维数组 lamps ，其中 lamps[i] = [rowi, coli] 表示 打开 位于 grid[rowi][coli] 的灯。即便同一盏灯可能在 lamps 中多次列出，不会影响这盏灯处于 打开 状态。
+
+       当一盏灯处于打开状态，它将会照亮 自身所在单元格 以及同一 行 、同一 列 和两条 对角线 上的 所有其他单元格 。
+
+       另给你一个二维数组 queries ，其中 queries[j] = [rowj, colj] 。对于第 j 个查询，如果单元格 [rowj, colj] 是被照亮的，则查询结果为 1 ，否则为 0 。在第 j 次查询之后 [按照查询的顺序] ，关闭 位于单元格 grid[rowj][colj] 上及相邻 8 个方向上（与单元格 grid[rowi][coli] 共享角或边）的任何灯。
+
+       返回一个整数数组 ans 作为答案， ans[j] 应等于第 j 次查询 queries[j] 的结果，1 表示照亮，0 表示未照亮。
+
+   题解:两条对角线分别为x+y和x-y，注意存pair的擦耦哦
+
 */
 package main
 
-func totalStrength(strength []int) int {
-	const MOD int = 1e9 + 7
-	var n int = len(strength)
-	left := make([]int, n)
-	right := make([]int, n)
-	for i := range right {
-		right[i] = n
+func max(a, b int) int {
+	if a > b {
+		return a
 	}
-	st := []int{}
-	for i, v := range strength {
-		for len(st) > 0 && strength[st[len(st)-1]] >= v {
-			right[st[len(st)-1]] = i
-			st = st[:len(st)-1]
+	return b
+}
+func tallestBillboard(rods []int) int {
+	n := len(rods)
+	sum := 0
+	for _, v := range rods {
+		sum += v
+	}
+	dp := make([]int, sum+1)
+	for i := 0; i <= sum; i++ {
+		dp[i] = 0
+	}
+	for i := 0; i < n; i++ {
+		tmp := []int{}           //这里不能写成tmp:=dp不然共享了内存空间
+		tmp = append(tmp, dp...) //记得这样弄，才能够避免直接饮用
+		for j := 0; j <= sum; j++ {
+			if dp[j] < j {
+				continue
+			} //高度差为j的时候至少长度为j
+			k := j + rods[i] //加到比较长的那一根去
+			if k <= sum {
+				tmp[k] = max(tmp[k], dp[j]+rods[i])
+			}
+			if j > rods[i] {
+				k = j - rods[i]
+			} else {
+				k = rods[i] - j
+			}
+			//加到短的一侧去
+			tmp[k] = max(tmp[k], dp[j]+rods[i])
 		}
-		if len(st) > 0 {
-			left[i] = st[len(st)-1] //由于单调栈内存的是一个严格递增的序列，所以栈顶元素就是left[i]
-		} else {
-			left[i] = -1
-		}
-		st = append(st, i)
+		dp, tmp = tmp, dp
 	}
-	prefix := 0
-	pprefix := make([]int, n+2)
-	for i, v := range strength {
-		prefix += v
-		pprefix[i+2] = (pprefix[i+1] + prefix) % MOD //前缀和的前缀和由于s[1]才开始有值，所以下标需要从2开始
-	}
-	//自此预处理完成了，开始计算
-	ans := 0
-	for i, v := range strength {
-		l, r := left[i]+1, right[i]-1 //记得加1，-1，用{1,2,3,1}这个数组元素2来方便理解
-		tot := ((i-l+1)*(pprefix[r+2]-pprefix[i+1]) - (r-i+1)*(pprefix[i+1]-pprefix[l])) % MOD
-		ans = (ans + v*tot) % MOD
-	}
-	return (ans + MOD) % MOD
+	return dp[0] / 2
 }
 func main() {
-	arr := []int{1, 3, 1, 2}
-	totalStrength(arr)
+	a := []int{2, 4, 8, 16}
+	tallestBillboard(a)
 }
