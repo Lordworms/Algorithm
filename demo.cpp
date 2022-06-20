@@ -25,7 +25,7 @@ public:
     vector<int> gridIllumination(int n, vector<vector<int>>& lamps, vector<vector<int>>& queries) {
         auto hash_p=[](const pair<int,int>&p)->size_t{
         static hash<long long>hashll;
-        return hashll(p.first+(static_cast<long long>((p.second))<<32);
+        return hashll(p.first+(static_cast<long long>((p.second))<<32));
     };
         unordered_set<pair<int,int>,decltype(hash_p)>st(0,hash_p);
         for(auto& lamp:lamps)
