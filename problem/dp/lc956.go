@@ -8,12 +8,6 @@
 */
 package problem
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 func tallestBillboard(rods []int) int {
 	n := len(rods)
 	sum := 0
