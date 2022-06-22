@@ -1,13 +1,14 @@
-CREATE TABLE `ota_task_device_mapping` (
+CREATE TABLE `connected_device` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `task_id` INT(11) NOT NULL DEFAULT '0',
   `sn` VARCHAR(50) NOT NULL DEFAULT '',
+  `port` INT(11) NOT NULL COMMENT 'opened port of cms device',
+  `create_time` INT(32) NOT NULL COMMENT 'unix timestamp of creating time',
   `gmt_create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `gmt_modified` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `task_id` (`task_id`) USING BTREE,
+  INDEX `port` (`port`) USING BTREE,
   INDEX `sn` (`sn`) USING BTREE
 )
-COMMENT='cms ota task'
+COMMENT='all connected devices'
 ENGINE=InnoDB
 ;
