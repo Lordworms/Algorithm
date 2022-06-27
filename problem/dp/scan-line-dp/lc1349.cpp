@@ -9,19 +9,22 @@
 using namespace std;
 class Solution {
 public:
-    int maxStudents(vector<vector<char>>& seats) {
-        int m=seats.size(),n=seats[0].size();
-        vector<vector<bool>>isvalid(m*n+1,vector<bool>(n,true));
-        for(int i=0;i<m;++i)for(int j=0;j<n;++j)if(seats[i][j]=='#')isvalid[i][j]=false;
-        int maxMask=1<<(n+1);
-        vector<vector<int>>dp(m*n+1,vector<int>(maxMask,0));
-        int i,j;
-        auto check=[&](int i,int j,int mask){
+    int m,n;
+     vector<vector<bool>>isvalid;
+     bool check(int i,int j,int mask){
           if(j>0&&isvalid[i][j-1]&&(mask&1)==1)return true;//左边
           if(j>0&&i>0&&isvalid[i-1][j-1]&&(((mask>>n)&1)==1))return true;//左上
           if(j<n-1&&i>0&&isvalid[i-1][j+1]&&((mask>>(n-2))&1)==1)return true;//右上
           return false;
-        };
+        }
+    int maxStudents(vector<vector<char>>& seats) {
+        m=seats.size(),n=seats[0].size();
+        isvalid.resize(m*n+1,vector<bool>(n,true));
+        for(int i=0;i<m;++i)for(int j=0;j<n;++j)if(seats[i][j]=='#')isvalid[i][j]=false;
+        int maxMask=1<<(n+1);
+        vector<vector<int>>dp(m*n+1,vector<int>(maxMask,0));
+        int i,j;
+       
         for(int id=m*n-1;id>=0;--id)
         {
             i=id/n,j=id%n;
