@@ -21,6 +21,7 @@
 */
 #include <bits/stdc++.h>
 using namespace std;
+//获得sa数组
 vector<int>getSa(string s)
 {
     int n=s.size();
@@ -49,6 +50,7 @@ vector<int>getSa(string s)
     }
     return sa;
 }
+//获得height数组
 vector<int>getLcp(string s)
 {
     int n=s.size();
