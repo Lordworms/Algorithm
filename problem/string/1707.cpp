@@ -12,18 +12,17 @@ using namespace std;
 class Solution {
 public:
     struct Trie{
-        const int len=30;
         Trie* child[2]={};
         void insert(int x)
         {
-           
+            int len=to_string(x).size();
             Trie* node=this;
             for(int i=len-1;i>=0;--i)
             {   
                 int bit=(x>>i)&1;
-                if(node->child[bit]==nullptr)
+                if(child[bit]==nullptr)
                 {
-                    node->child[bit]=new Trie();
+                    child[bit]=new Trie();
                 }
                 node=node->child[bit];
             }
@@ -31,17 +30,17 @@ public:
         int getMaxXor(int x)//获取最大的异或值
         {
             int ans=0;
-            int bit;
+            int len=to_string(x).size(),bit;
             Trie* node=this;
             for(int i=len-1;i>=0;--i)
             {
-                bit=(x>>i)&1;
+                bit=x&(1<<(i));
                 if(node->child[bit^1]!=nullptr)//当前位相反的不为空指针
                 {
                     ans|=(1<<i);
                     bit^=1;
                 }
-                node=node->child[bit];
+                else  node=node->child[bit];
             }
             return ans;
         }
@@ -54,14 +53,14 @@ public:
         int lim=0;
         Trie* root=new Trie;
         vector<int>ans(queries.size());
-        for(int i=0;i<queries.size();++i)
+        for(int i=0;i<nums.size();++i)
         {
             int id=queries[i][2],m=queries[i][1],x=queries[i][0];
             while(lim<n&&nums[lim]<=m)
             {
                 root->insert(nums[lim++]);
             }
-            if(lim<=0)//动过了
+            if(lim>0)//动过了
             {
                 ans[id]=-1;
             }
@@ -77,8 +76,8 @@ int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
-  vector<int>nums={5,2,4,6,6,3};
-  vector<vector<int>>que={{12,4},{8,1},{6,3}};
+  vector<int>nums={0,1,2,3,4};
+  vector<vector<int>>que={{3,1},{1,3},{5,6}};
   Solution sol;
   sol.maximizeXor(nums,que);
   return 0;
