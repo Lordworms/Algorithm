@@ -1,6 +1,6 @@
 /*
 题意：给你一个整数数组 nums ，返回 nums[i] XOR nums[j] 的最大运算结果，其中 0 ≤ i ≤ j < n 。
-题解：字典树板子题
+题解：01字典树板子题
 */
 #include <bits/stdc++.h>
 using namespace std;
