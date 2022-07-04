@@ -11,67 +11,46 @@
 
 
 题解：枚举子状态就完事了，注意二进制的运用，另一种方式是使用字典树
-    枚举状态的时候记得全0的状态也要枚举进去，所以这个时候需要我们设置一个flag表示可以枚举一次0的情况
+    枚举状态的时候记得全0的状态也要枚举进去，所以这个时候需要我们把
 
 */
 #include <bits/stdc++.h>
 using namespace std;
-class Trie {
-public:
-    const int L = 30;
-
-    Trie* children[2] = {};
-
-    void insert(int val) {
-        Trie* node = this;
-        for (int i = L - 1; i >= 0; --i) {
-            int bit = (val >> i) & 1;
-            if (node->children[bit] == nullptr) {
-                node->children[bit] = new Trie();
-            }
-            node = node->children[bit];
-        }
-    }
-
-    int getMaxXor(int val) {
-        int ans = 0;
-        Trie* node = this;
-        for (int i = L - 1; i >= 0; --i) {
-            int bit = (val >> i) & 1;
-            if (node->children[bit ^ 1] != nullptr) {
-                ans |= 1 << i;
-                bit ^= 1;
-            }
-            node = node->children[bit];
-        }
-        return ans;
-    }
-};
-
 class Solution {
 public:
-    vector<int> maximizeXor(vector<int> &nums, vector<vector<int>> &queries) {
-        sort(nums.begin(), nums.end());
-        int numQ = queries.size();
-        for (int i = 0; i < numQ; ++i) {
-            queries[i].push_back(i);
+    vector<int> findNumOfValidWords(vector<string>& words, vector<string>& puzzles) {
+        unordered_map<int,int>freq;
+        vector<bitset<26>>bvec;
+        for(string& word:words)
+        {
+            int mask=0;
+            for(char& c:word)
+            {
+                mask|=(1<<(c-'a'));
+            }
+            int n=__builtin_popcount(mask);
+            if(n<=7)
+            {
+                ++freq[mask];   
+            }
+            bvec.push_back(bitset<26>(mask));
         }
-        sort(queries.begin(), queries.end(), [](auto &x, auto &y) { return x[1] < y[1]; });
-
-        vector<int> ans(numQ);
-        Trie* t = new Trie();
-        int idx = 0, n = nums.size();
-        for (auto &q : queries) {
-            int x = q[0], m = q[1], qid = q[2];
-            while (idx < n && nums[idx] <= m) {
-                t->insert(nums[idx]);
-                ++idx;
+        vector<int>ans;
+        for(string puz:puzzles)
+        {
+            int mask=0,total=0;
+            for(int i=1;i<puz.size();++i)mask|=(1<<(puz[i]-'a'));
+            for(int sub=mask,flag=true;flag;sub=((sub-1)&mask))
+            {
+                int s=(sub|(1<<(puz[0]-'a')));
+                if(sub==0)flag=false;
+                bitset<26>a(s);
+                if(freq.count(s))
+                {
+                    total+=freq[s];
+                }
             }
-            if (idx == 0) { // 字典树为空
-                ans[qid] = -1;
-            } else {
-                ans[qid] = t->getMaxXor(x);
-            }
+            ans.push_back(total);
         }
         return ans;
     }

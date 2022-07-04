@@ -26,3 +26,5 @@
 （6）使用Last Will和Testament特性通知有关各方客户端异常中断的机制。
 	Last Will：即遗言机制，用于通知同一主题下的其他设备发送遗言的设备已经断开了连接。
 	Testament：遗嘱机制，功能类似于Last Will。
+
+
