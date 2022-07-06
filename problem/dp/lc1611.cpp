@@ -18,7 +18,7 @@ public:
         int ans=0;
         vector<long>dp1(32,0),dp2(32,0);
         dp1[0]=dp2[0]=1;
-        for(int i=1;i<=31;++i)
+        for(int i=1;i<=31;--i)
         {
             dp1[i]=dp1[i-1]+1+dp2[i-1];
             dp2[i]=dp1[i-1]+1+dp2[i-1];
@@ -38,7 +38,5 @@ int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
-  Solution sol;
-  sol.minimumOneBitOperations(3);
 return 0;
 }
