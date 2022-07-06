@@ -32,7 +32,7 @@ public:
             }
             for(int i=1;i<=n;++i)rk[i]=rk2[i];
         }
-        return sa[n];
+        return rk[n];
     }
     string lastSubstring(string s) {
         int num=getMax(s);
@@ -43,7 +43,5 @@ int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
-  Solution sol;
-  cout<<sol.lastSubstring("abab");
-  return 0;
+return 0;
 }
