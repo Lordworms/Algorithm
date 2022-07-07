@@ -85,7 +85,6 @@ vector<int>getSa(string s)//计数排序，时间复杂度为nlog(m)
         if(len==n)break;lim=len;
 
    }
-   
    return sa;
 }
 //获得height数组
