@@ -6,7 +6,7 @@
 using namespace std;
 vector<int>getSa(string s)
 {
-  
+
   
 }
 int main()
@@ -15,3 +15,4 @@ int main()
   cin.tie(nullptr);
   getSa("abab");
 }
+//http://www.javashuo.com/article/p-guckrqtj-ne.html
