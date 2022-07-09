@@ -18,74 +18,44 @@
                 那么sa[i]=AD sa[rk[i-1]-1]+1=AB
                 又根据上面的引理lcp(i,sa[rk[i-1]-1]+1)=A=height[i-1]-1<=h[i]
                 那么得证
+        看这个网址就行了https://blog.csdn.net/zjllll123/article/details/107369473
 
 */
 #include <bits/stdc++.h>
 using namespace std;
-//获得sa数组
-vector<int>getSa_increase(string s)
+vector<int>getSa(string s)
 {
-    int n=s.size();
-    vector<int>sa(n+1,0),rk(n+1,0);
-    for(int i=1;i<=n;++i)sa[i]=i,rk[i]=s[i-1];
-    int k=0;
-    auto cmp=[&](int i,int j){
-        if(rk[i]!=rk[j])
-        {
-            return rk[i]<rk[j];
-        }
-        int ri=(i+k<=n?rk[i+k]:-1);
-        int rj=(j+k<=n?rk[j+k]:-1);
-        return ri<rj;
+    int n=s.size(),m=130;//
+    vector<int>sa(n+1,0),rk(n+1,0),pos(n+1,0),cnt(m,0);
+    auto base_sort=[&](){
+        fill(cnt.begin(),cnt.begin()+m,0);
+        for(int i=1;i<=n;++i)cnt[rk[i]]++;
+        for(int i=2;i<=m;++i)cnt[i]+=cnt[i-1];
+        for(int i=n;i>=0;--i)sa[cnt[rk[pos[i]]]--]=pos[i];
     };
-    vector<int>rk2(n+1,0);
-    for(k=1;k<=n;k<<=1)
+    auto check=[&](int x,int y,int k){
+         if(pos[x]!=pos[y])
+         {
+            return false;
+         }
+         int r1=x+k>n?-1:pos[x+k];
+         int r2=y+k>n?-1:pos[y+k];
+         return r1==r2;
+    };
+    for(int i=1;i<=n;++i)rk[i]=s[i-1],pos[i]=i;
+    for(int k=1;k<=n;k<<=1)
     {
-        sort(sa.begin()+1,sa.begin()+n+1,cmp);
-        rk2[sa[1]]=1;
-        for(int i=2;i<=n;++i)
-        {
-            rk2[sa[i]]=rk2[sa[i-1]]+cmp(sa[i-1],sa[i]);;
-        }
-        for(int i=1;i<=n;++i)rk[i]=rk2[i];
+        int rank=0;for(int i=n-k+1;i<=n;++i)pos[++rank]=i;
+        for(int i=1;i<=n;++i)if(sa[i]>k)pos[++rank]=s[i]-k;
+        base_sort();
+        swap(rk,pos);
+        rank=1;rk[sa[1]]=rank;
+        //这个时候的pos数组是rk
+        for(int i=2;i<=n;++i){if(!check(sa[i],sa[i-1],k))++rank;rk[sa[i]]=rank;}
+        if(rank==n)break;//完全排好序了
+        m=rank;
     }
     return sa;
-}
-/*
-    rank[i]表示编号为i的排名 
-    sa[i]表示排名为i的编号 
-    cnt[i]计数排序的桶 
-    pos[i]表示当前第二关键字已经排好序时第i名第二关键字所对应的第一关键字位置
-    tmp[i]
-    排序时：表示当前排序中编号为i的排名
-    排序后：表示调整rank前的排名
-*/
-vector<int>getSa(string s)//计数排序，时间复杂度为nlog(m)
-{
-   int lim=130;//对应的位数，'z'的值为122，所以这里设置成130，保险起见
-   int n=s.size();
-   vector<int>sa(n+1,0),rk(n+1,0),pos(n+1,0),tmp(n+1,0);//pos数组表示当前第二关键字已经排好序的时候第i名第二关键字所对应的第一关键字位置
-   vector<int>cnt(lim,0);//cnt为基数排序的桶，由于对于单个字符来说'z'的排名为122，保险起见设置成130
-   auto check=[&](int x,int y,int k){return tmp[x]==tmp[y]&&tmp[x+k]==tmp[y+k];};
-   int i,k;
-   for(i=1;i<=n;++i)rk[i]=s[i-1],cnt[rk[i]]++;//rk[i]此时对单个字符进行排名，随后对应的桶++
-   for(i=1;i<=lim;++i)cnt[i]+=cnt[i-1];//我们累加对应的cnt
-   for(i=n;i>=1;--i)sa[cnt[rk[i]]--]=i;//计数排序，排出长度为1的字符的排名
-   for(k=1;k<n;k<<=1)//现在开始弄长度为[2,n]的后缀
-   {
-        int len=0;for(i=n-k+1;i<=n;++i)pos[++len]=i;//如果第二关键字为0的话，确定最小，所以先加入pos,从n-k+1位置开始，这些第二关键字都为0，所以分别为第0.。。len名
-        for(i=1;i<=n;++i)if(sa[i]>k)pos[++len]=sa[i]-k;//对应的前一位置的排名
-        fill(cnt.begin(),cnt.end(),0);//重置一下cnt数组
-        for(i=1;i<=n;++i)tmp[i]=rk[pos[i]],cnt[tmp[i]]++;//tmp保存上一个位置的排名，cnt保存上一位
-        for(i=1;i<=lim;++i)cnt[i]+=cnt[i-1];
-        for(i=n;i>=1;--i)sa[cnt[tmp[i]]--]=pos[i];
-        for(i=1;i<=n;++i)tmp[i]=rk[i];
-        len=1,rk[sa[1]]=1;
-        for(i=2;i<=n;++i){if(!check(sa[i],sa[i-1],k))++len;rk[sa[i]]=len;}
-        if(len==n)break;lim=len;
-
-   }
-   return sa;
 }
 //获得height数组
 vector<int>getLcp(string s)
