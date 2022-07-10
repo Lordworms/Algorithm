@@ -28,10 +28,11 @@ vector<int>getSa(string s)
     int n=s.size(),m=130;//
     vector<int>sa(n+1,0),rk(n+1,0),pos(n+1,0),cnt(m,0);
     auto base_sort=[&](){
-        fill(cnt.begin(),cnt.begin()+m,0);
+        fill(cnt.begin(),cnt.begin()+m+1,0);
         for(int i=1;i<=n;++i)cnt[rk[i]]++;
-        for(int i=2;i<=m;++i)cnt[i]+=cnt[i-1];
-        for(int i=n;i>=0;--i)sa[cnt[rk[pos[i]]]--]=pos[i];
+        for(int i=2;i<m;++i)cnt[i]+=cnt[i-1];
+        for(int i=n;i>=1;--i)sa[cnt[rk[pos[i]]]--]=pos[i];//此时第一位的次序依旧不变，此时还是用的前一次的rank，
+        //不同的是pos[i]的改变，对于rk[pos[i]]==rk[pos[j]]来说，如果你i<j，那么你的会慢一点遍历到，对应的sa值也就会小
     };
     auto check=[&](int x,int y,int k){
          if(pos[x]!=pos[y])
@@ -43,10 +44,11 @@ vector<int>getSa(string s)
          return r1==r2;
     };
     for(int i=1;i<=n;++i)rk[i]=s[i-1],pos[i]=i;
+    base_sort();
     for(int k=1;k<=n;k<<=1)
     {
         int rank=0;for(int i=n-k+1;i<=n;++i)pos[++rank]=i;
-        for(int i=1;i<=n;++i)if(sa[i]>k)pos[++rank]=s[i]-k;
+        for(int i=1;i<=n;++i)if(sa[i]>k)pos[++rank]=sa[i]-k;
         base_sort();
         swap(rk,pos);
         rank=1;rk[sa[1]]=rank;
@@ -87,3 +89,52 @@ int main()
   for(auto& i:ans)cout<<i<<" ";
   return 0;
 }
+/*
+    直接便携式用：
+        vector<int>rk(n+1,0),sa(n+1,0),pos(n+1,0),cnt(m,0),lcp(n+1,0);;
+        auto base_sort=[&](){
+            fill(cnt.begin(),cnt.end(),0);
+            for(int i=1;i<=n;++i)cnt[rk[i]]++;
+            for(int i=2;i<m;++i)cnt[i]+=cnt[i-1];
+            for(int i=n;i>=1;--i)sa[cnt[rk[pos[i]]]--]=pos[i];
+        };
+        auto getSa=[&](){
+            auto check=[&](int x,int y,int k){
+                if(pos[x]!=pos[y])
+                {
+                    return false;
+                }
+                int r1=x+k>n?-1:pos[x+k];
+                int r2=y+k>n?-1:pos[y+k];
+                return r1==r2;
+            };
+            for(int i=1;i<=n;++i)pos[i]=i,rk[i]=s[i-1];
+            base_sort();
+            for(int k=1;k<=n;k<<=1)
+            {
+                int rank=0;for(int i=n-k+1;i<=n;++i)pos[++rank]=i;
+                for(int i=1;i<=n;++i)if(sa[i]>k)pos[++rank]=sa[i]-k;
+                base_sort();
+                swap(rk,pos);
+                rk[sa[1]]=rank=1;
+                for(int i=2;i<=n;++i){if(!check(sa[i],sa[i-1],k))++rank;rk[sa[i]]=rank;}
+                if(rank==n)break;
+                m=rank;
+            }
+        };
+        auto getHeight=[&]()
+        {
+            getSa();
+            int h=0;
+            lcp[rk[1]]=0;
+            for(int i=1;i<=n;++i)
+            {
+                int k=sa[rk[i]-1];//sa[i-1]的开始位置
+                if(!k)continue;
+                if(h)--h;
+                for(;k+h<=n&&i+h<=n;++h)if(s[k+h-1]!=s[i+h-1])break;
+                lcp[rk[i]]=h;
+            }
+        };
+
+*/
