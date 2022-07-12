@@ -5,6 +5,7 @@
     给出正整数 n 和 k，请计算f(n,k)=西格玛i=[1,n]kmodi
     k mod i= k-i*k/i然后就可以算啦
     f(i)=i;
+    注意ll的问题
 */
 #include <bits/stdc++.h>
 using namespace std;
