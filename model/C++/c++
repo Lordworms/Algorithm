@@ -3,4 +3,6 @@
 3.stl的unique函数：unique函数并不是把重复的元素删除掉，而是把这些元素移动到数组的尾端，注意我们在使用unique之前需要对原数组进行排序
 例如arr={1,1,2,2,3,3,4,4}
 unique后变成arr={1,2,3,4,1,2,3,4};
+std::remove函数也是如此，所以要删除指定的字符应该这样弄
+std::erase(remove(str.begin(),str.end(),'char'),str.end())
 4.iota(a.begin(),a.end(),0)用第三个参数类型的连续值填充前两个的范围
