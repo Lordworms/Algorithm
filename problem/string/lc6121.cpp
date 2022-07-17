@@ -30,6 +30,6 @@ int main()
   vector<int>nums={3,2,6,2,35,5,35,2,5,8,7,3,4};
   vector<int>nums1={105,70,70,175,105,105,105};
   Solution sol;
-  sol.minOperations(nums,nums1);
+  sol.smallestTrimmedNumbers(nums,nums1);
   return 0;
 }
