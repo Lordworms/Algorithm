@@ -8,12 +8,13 @@
     注意我们进行对称之后到达的终点应该也是对称的，所以需要还原回去（这里我们是做了方向向量=(1,1)的统一）
     之后我们需要最小的a和b的值
     又一个地方不太明白，为什么算出来的a需要对m/gcd(n,m)取模
-    疑问：为什么这里要对m/gcd(n,m)取模而不是对n/gcd(n,m)取模
+    疑问：因为这里本来a就对应n，所以要对m/gcd(n,m)取模
 
 */
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
+
 int exgcd(int a,int b,int& x,int& y)
 {
     if(!b)
@@ -27,6 +28,20 @@ int exgcd(int a,int b,int& x,int& y)
     y=t-(a/b)*y;
     return d;
 }
+
+/*
+int exgcd(int a,int b,int& x,int& y)
+{
+    if(!b)
+    {
+        x=1,y=0;
+        return a;
+    }
+    int d=exgcd(b,a%b,y,x);
+    y-=(a/b)*x;
+    return d;
+}
+*/
 signed main()
 {
   ios::sync_with_stdio(false);
@@ -60,7 +75,7 @@ signed main()
   if(vx==-1)x=n-x,fx=true;
   if(vy==-1)y=m-y,fy=true;
   int a,b;
-  int g=exgcd(n,m,a,b);
+  int g=exgcd(n,m,a,b);//这里a本来就对的n
   if((x-y)%g!=0){
     cout<<-1<<endl;
     return 0;
@@ -68,8 +83,8 @@ signed main()
   int mul=(x-y)/g;
   a*=mul,b*=mul;
   int _a,_b;
-  int _m=m/g,_n=n/g;
-  _a=(a%_m+_m+_m-1)%_m+1;//很重要的写法，这里不需要正整数解，就不需要按照正整数解来操作
+  int _m=n/g,_n=n/g;
+  _a=a==0?a:(a%_m+_m+_m-1)%_m+1;//很重要的写法，这里不需要正整数解，就不需要按照正整数解来操作
   _b=-(((x-y)-_a*n)/m);
   ansx=(_a&1)==1?n:0;
   ansy=(_b&1)==1?m:0;
