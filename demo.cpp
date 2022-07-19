@@ -24,12 +24,13 @@ int get(int dx,int dy)
 {
   int x,y;
   int g=exgcd(2*n,2*m,x,y);
-  if((dy-dx)%g!=0)return INT_MAX;
+  if((dy-dx)%g!=0)return lim+1;
   x*=(dy-dx)/g;
   y*=(dy-dx)/g;
   int mod=2*m/g;
   x=(x%mod+mod)%mod;
   int ans=x*2*n+dx;
+  if(ans<0)return lim+1;
   return ans;
 }
 int solve(int x,int y)

@@ -24,24 +24,23 @@ int get(int dx,int dy)
 {
   int x,y;
   int g=exgcd(2*n,2*m,x,y);
-  if((dy-dx)%g!=0)return INT_MAX;
+  if((dy-dx)%g!=0)return lim+1;
   x*=(dy-dx)/g;
   y*=(dy-dx)/g;
-  int m=2*n/g;
-  x=(x%m+m+m-1)%m+1;
+  int mod=2*m/g;
+  x=(x%mod+mod)%mod;
   int ans=x*2*n+dx;
-  if(ans<0)return INT_MAX;
+  if(ans<0)return lim+1;
   return ans;
 }
 int solve(int x,int y)
 {
-  int ans=INT_MAX;
+  int ans=lim+1;
   ans=min(get(x,y),ans);
   ans=min(get(-x,y),ans);
   ans=min(get(x,-y),ans);
   ans=min(get(-x,-y),ans);
-  if(ans>lim)ans=INT_MAX;
-  if(ans==INT_MAX)return -1;
+  if(ans>lim||ans<0)return -1;
   return ans;
 }
 signed main()
