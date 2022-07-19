@@ -6,6 +6,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
+int n,m,k,lim;
 int exgcd(int a,int b,int& x,int& y)
 {
     if(!b)
@@ -16,11 +17,45 @@ int exgcd(int a,int b,int& x,int& y)
     int d=exgcd(b,a%b,x,y);
     int t=x;
     x=y;
-    y=
+    y=t-(a/b)*y;
+    return d;
+}
+int get(int dx,int dy)
+{
+  int x,y;
+  int g=exgcd(2*n,2*m,x,y);
+  if((dy-dx)%g!=0)return INT_MAX;
+  x*=(dy-dx)/g;
+  y*=(dy-dx)/g;
+  int m=2*n/g;
+  x=(x%m+m+m-1)%m+1;
+  int ans=x*2*n+dx;
+  if(ans<0)return INT_MAX;
+  return ans;
+}
+int solve(int x,int y)
+{
+  int ans=INT_MAX;
+  ans=min(get(x,y),ans);
+  ans=min(get(-x,y),ans);
+  ans=min(get(x,-y),ans);
+  ans=min(get(-x,-y),ans);
+  if(ans>lim)ans=INT_MAX;
+  if(ans==INT_MAX)return -1;
+  return ans;
 }
 signed main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
+  cin>>n>>m>>k;
+  int x,y;
+  lim=n/exgcd(n,m,x,y)*m;
+  int q,t,g;
+  while(k--)
+  {
+    cin>>x>>y;
+    cout<<solve(x,y)<<endl;
+  }  
   return 0;
 }
