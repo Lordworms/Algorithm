@@ -11,7 +11,7 @@ int quick_mul(int a,int b,int mod)
     {
         if(b&1)ans=(ans+a%mod)%mod;
         b>>=1;
-        a=a*a%mod;
+        a=(a+a)%mod;
     }
     return ans;
 }

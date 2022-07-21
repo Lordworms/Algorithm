@@ -29,7 +29,7 @@ int CRT(vector<int>arr,vector<int>r)
     }
     return ans;
 }
-int EXCRT(vector<int>arr,vector<int>r)
+iint EXCRT(vector<int>arr,vector<int>r)
 {
    auto quick_mul=[](int a,int b,int mod)
    {
@@ -38,20 +38,40 @@ int EXCRT(vector<int>arr,vector<int>r)
         {
             if(b&1)ans=(ans+a%mod)%mod;
             b>>=1;
-            a=a*a%mod;
+            a=(a+a)%mod;
         }
         return ans;
    };
    auto lcm=[](int n,int m)
    {
-        int x,y;
-        return n/exgcd(n,m,x,y)*m;
+        int x,y,g=exgcd(n,m,x,y);
+        return n/g*m;
    };
-   int ans=r[0],M=arr[0],n=arr.size();
+   int ans=arr[0],M=r[0],n=arr.size();
+    //x=arr[1](mod r[1]) x=arr[2](mod r[2])
+    //x=r[1]*x+arr[1]=r[2]*y+arr[2]
+    //r[1]*x-r[2]*y=arr[2]-arr[1]
+    //x=(x*(arr[2]-arr[1])/gcd(arr[2]-arr[1])+r[2]/gcd[r[1],r[2]])%(r[2]/gcd(r[1],r[2]))即可
+    //M=lcm(r[1],r[2])
+
+    //x=a*r[i]+arr[i]=b*M+ans
+    //b*M-a*r[i]=arr[i]-ans;
+    //fac=(arr[i]-ans)/gcd(M,r[i]);
+    //b*=fac; ans+=b*M
+    //M=lcm(M,r[i])
+   int x,y;
    for(int i=1;i<n;++i)
    {
-        
+      int C=(arr[i]-ans%r[i]+r[i])%r[i];
+      int g=exgcd(M,r[i],x,y);
+      if(C%g)return -1;   
+      while(x<0)x+=(r[i]/g); 
+      x=quick_mul(x,C/g,r[i]);
+      ans+=x*M;//这里不需要mod
+      M=lcm(M,r[i]);
+      ans=(ans+M)%M;//已经合并了，所以需要继续弄
    }
+   return ans;
 }
 int main()
 {
