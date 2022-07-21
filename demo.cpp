@@ -1,65 +1,39 @@
 /*
-先选比第k的数大的，然后在和第k个数相同的数里选k-pos个就可以了
+题意：
+题解：
 */
 #include <bits/stdc++.h>
 using namespace std;
-#define int long long
-const int mod=1e9+7;
-const int MAXN=1010;
-int inv[MAXN],fac[MAXN];
-int quick_pow(int x,int exp)
+int quick_pow(int x,int exp,int mod)
 {
     int ans=1;
     while(exp)
     {
-        if(exp&1)ans=ans*x%mod;
-        x=x*x%mod;
-        exp>>=1;
+       if(exp&1)ans=ans*x%mod;
+       x=x*x%mod;
+       exp>>=1; 
     }
-    return ans;
+    return ans%mod;
 }
-void init()
+int CRT(vector<int>arr,vector<int>r)
 {
-    fac[0]=inv[0]=1;
-    for(int i=1;i<=MAXN;++i)fac[i]=fac[i-1]*i%mod,inv[i]=quick_pow(fac[i],mod-2)%mod;
+    int re=1,ans=0;
+    for(int num:r)re*=num;
+    for(int i=0;i<arr.size();++i)
+    {
+        int m=re/r[i];
+        ans=(ans+quick_pow(m,r[i]-2,re)*m*arr[i])%re;
+    }
+    return ans%re;
 }
-int C(int n,int m)
-{
-    if(m<0||m>n)return 0;
-    return fac[n]*inv[n-m]%mod*inv[m]%mod;
-}
-signed main()
+int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
-  map<int,int,greater<int>>mp;
-  vector<int>arr;
-  init();
-  int T,n,k;
+  int T;
   cin>>T;
-  while(T--)
-  {
-    cin>>n>>k;
-    mp.clear();
-    arr.clear();
-    arr.resize(n);
-    for(int i=0;i<n;++i)
-    {
-        cin>>arr[i];
-        mp[arr[i]]++;
-    }
-    for(auto& it:mp)
-    {
-      if(k>it.second)
-      {
-        k-=it.second;
-      }
-      else
-      {
-        cout<<C(it.second,k)<<endl;
-        break;
-      }
-    }
-  }
+  vector<int>arr(T),r(T);
+  for(int i=0;i<T;++i)cin>>r[i]>>arr[i];
+  cout<<CRT(arr,r)<<endl;
   return 0;
 }
