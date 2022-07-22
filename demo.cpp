@@ -1,73 +1,94 @@
-/*
-题意：
-题解：
-*/
-#include <bits/stdc++.h>
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<map>
+#include<stack>
+#include<set>
+#include<ctime>
+#define iss ios::sync_with_stdio(false)
 using namespace std;
-#define int long long
-int exgcd(int a,int b,int& x,int& y)
-{
-    if(!b)
-    {
-        x=1,y=0;
+typedef unsigned long long ull;
+typedef long long ll;
+const int mod=1e9+7;
+const int MAXN=1e6+5;
+const int N=1e5+10;
+int n,m;
+int p1[MAXN],p2[MAXN];
+ll dp[MAXN];
+ll gcd(ll a,ll b) {
+    return b == 0 ? a : gcd(b,a%b);
+}
+ll exgcd(ll a,ll b,ll &x,ll &y) {
+    if(b == 0) {
+        x = 1,y = 0;
         return a;
     }
-    int d=exgcd(b,a%b,y,x);
-    y-=(a/b)*x;
-    return d;
+    else {
+        ll res = exgcd(b,a%b,x,y);
+        ll t = x;
+        x = y;
+        y = t - a / b * y;
+        return res;
+    }
 }
-int EXCRT(vector<int>arr,vector<int>r)
-{
-   auto quick_mul=[](int a,int b,int mod)
-   {
-        int ans=0;
-        while(b)
-        {
-            if(b&1)ans=(ans+a%mod)%mod;
-            b>>=1;
-            a=(a+a)%mod;
+ll excrt(ll m1,ll m2,ll a1,ll a2) {
+    ll x,y,c,g;
+    c = a2 - a1;
+    g = exgcd(m1,m2,x,y);
+    x = x * c / g;
+    y = m2 / g;
+    x = (x % y + y) % y;
+    a1 = a1 + x * m1;
+    m1 = m1 * m2 / g;
+    return a1;
+}
+bool check(ll mid,ll k,ll lc){
+    ll res=0;
+    int maxx=max(n,m)*2;
+    for(int i=1;i<=maxx;i++){
+        if(!p1[i]||!p2[i]||!dp[i]) continue;
+        if(dp[i]<=mid){
+            res+=(mid-dp[i])/lc+1;
         }
-        return ans;
-   };
-   auto lcm=[](int n,int m)
-   {
-        int x,y,g=exgcd(n,m,x,y);
-        return n/g*m;
-   };
-   int ans=arr[0],M=r[0],n=arr.size();
-    //x=arr[1](mod r[1]) x=arr[2](mod r[2])
-    //x=r[1]*x+arr[1]=r[2]*y+arr[2]
-    //r[1]*x-r[2]*y=arr[2]-arr[1]
-    //x=(x*(arr[2]-arr[1])/gcd(arr[2]-arr[1])+r[2]/gcd[r[1],r[2]])%(r[2]/gcd(r[1],r[2]))即可
-    //M=lcm(r[1],r[2])
-
-    //x=a*r[i]+arr[i]=b*M+ans
-    //b*M-a*r[i]=arr[i]-ans;
-    //fac=(arr[i]-ans)/gcd(M,r[i]);
-    //b*=fac; ans+=b*M
-    //M=lcm(M,r[i])
-   int x,y;
-   for(int i=1;i<n;++i)
-   {
-      int C=(arr[i]-ans%r[i]+r[i])%r[i];
-      int g=exgcd(M,r[i],x,y);
-      if(C%g)return -1;   
-      while(x<0)x+=(r[i]/g); 
-      x=quick_mul(x,C/g,r[i]);
-      ans+=x*M;//这里不需要mod
-      M=lcm(M,r[i]);
-      ans=(ans+M)%M;//已经合并了，所以需要继续弄
-   }
-   return ans;
+        if(mid-res<k) return false;
+    }
+    return mid-res>=k;
 }
-signed main()
+int main()
 {
-  ios::sync_with_stdio(false);
-  cin.tie(nullptr);
-  vector<int>arr,r;
-  int n;
-  cin>>n;arr.resize(n),r.resize(n);
-  for(int i=0;i<n;++i)cin>>r[i]>>arr[i];
-  cout<<EXCRT(arr,r)<<endl;
-  return 0;
+    ll k;
+    scanf("%d%d%lld",&n,&m,&k);
+    for(int i=1,x;i<=n;i++){
+        scanf("%d",&x);
+        p1[x]=i;
+    }
+    for(int i=1,x;i<=m;i++){
+        scanf("%d",&x);
+        p2[x]=i;
+    }
+    int maxx=max(n,m)*2;
+    int gc=gcd(n,m);
+    for(int i=1;i<=maxx;i++){
+        if(!p1[i]||!p2[i]) continue;
+        if(abs(p1[i]-p2[i])%gc!=0) continue;
+        dp[i]=excrt(n,m,p1[i],p2[i]);
+    }
+    ll l=k,r=1e18;
+    ll lc=1ll*n*m/gc;
+    ll ans;
+    while(l<=r){
+        ll mid=(l+r)>>1;
+        if(check(mid,k,lc)){
+            ans=mid;
+            r=mid-1;
+        }
+        else{
+            l=mid+1;
+        }
+    }
+    printf("%lld\n",ans);
 }
+

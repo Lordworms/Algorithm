@@ -29,7 +29,8 @@ int CRT(vector<int>arr,vector<int>r)
     }
     return ans;
 }
-iint EXCRT(vector<int>arr,vector<int>r)
+//算的是x加的也是x
+int EXCRT(vector<int>arr,vector<int>r)
 {
    auto quick_mul=[](int a,int b,int mod)
    {
@@ -64,9 +65,10 @@ iint EXCRT(vector<int>arr,vector<int>r)
    {
       int C=(arr[i]-ans%r[i]+r[i])%r[i];
       int g=exgcd(M,r[i],x,y);
-      if(C%g)return -1;   
-      while(x<0)x+=(r[i]/g); 
+      if(C%g)return -1; 
       x=quick_mul(x,C/g,r[i]);
+      y=r[i]/g;  
+      x=(x%y+y)%y;
       ans+=x*M;//这里不需要mod
       M=lcm(M,r[i]);
       ans=(ans+M)%M;//已经合并了，所以需要继续弄
