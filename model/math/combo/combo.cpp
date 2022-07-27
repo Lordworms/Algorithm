@@ -17,7 +17,21 @@ void init()
         }
     }
 }
-
+int get_inv(int n)//递归方式求
+{
+  return n==1?1:get_inv(mod%n)*(mod-mod/n);
+}
+int C(int n,int m)
+{
+    if(m<0||m>n)return 0;
+    int up=1,down=1;
+    for(int i=0;i<m;++i)
+    {
+        up=up*(n-i)%mod;
+        down=down*(i+1)%mod;
+    }
+    return up*get_inv(down);
+}
 int main()
 {
   ios::sync_with_stdio(false);

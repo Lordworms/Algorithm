@@ -1,6 +1,6 @@
 /*
 线性求逆元，
-逆元：若ax=1(mod p)则x为ax modp的逆yuan
+逆元：若ax=1(mod p)则x为ax modp的逆元
 逆元也可以用来求组合数
 */
 #include <bits/stdc++.h>
@@ -17,7 +17,7 @@ int quick_pow(int x,int exp,int p)
       }
       return ans;
 }
-void init_inv(int n,int mod,int p)
+void init_inv(int n,int mod,int p)//想想怎么证明
 {
     int inv[MAXN];
     memset(inv,0,sizeof(inv));
@@ -26,6 +26,11 @@ void init_inv(int n,int mod,int p)
     {
         inv[i]=((p-(p/i))*inv[p%i])%mod;
     }
+}
+int mod;
+int get_inv(int n)//递归方式求
+{
+  return n==1?1:get_inv(mod%n)*(mod-mod/n);
 }
 //求任意n个数的逆元
 vector<int>get_multi_inv(vector<int>arr,int p)
