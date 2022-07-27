@@ -1,73 +1,98 @@
-/*
-题意：
-题解：
-*/
 #include <bits/stdc++.h>
+ 
 using namespace std;
-#define int long long
-const int MAXN=1e6+10;
-int row1[MAXN],row2[MAXN],dp[MAXN];
-int lim;
-int exgcd(int a,int b,int& x,int& y)
+typedef long long ll;
+typedef long double ld;
+ 
+#define x0 x0___
+#define y0 y0___
+#define pb push_back
+#define SZ(X) ((int)X.size())
+#define mp make_pair
+#define fi first
+#define se second
+#define pii pair<int,int>
+#define pll pair<ll,ll>
+#define pli pair<ll,int>
+#define pil pair<int,ll>
+#define ALL(X) X.begin(),X.end()
+#define RALL(X) X.rbegin(),X.rend()
+#define rep(i,j,k) for(int i = j;i <= k;i ++)
+#define per(i,j,k) for(int i = j;i >= k;i --)
+#define mem(a,p) memset(a,p,sizeof(a))
+ 
+ 
+const ll MOD = 1E9 + 7;
+ll qmod(ll a,ll b,ll c) {ll res=1;a%=c; assert(b>=0); for(;b;b>>=1){if(b&1)res=res*a%c;a=a*a%c;}return res;}
+ 
+template<typename T, typename S>
+void upmax(T& a,S b){if(a<b) a=b;}
+template<typename T, typename S>
+void upmin(T& a,S b){if(a>b) a=b;}
+template<typename T>
+void W(T b){cout << b << endl;}
+void gettle() {while(1);}
+void getre() {int t=0;t/=t;}
+ 
+ 
+/
+/
+/
+/
+ 
+ll x[25];
+ll f[25];
+ll inv[25];
+ 
+ 
+ 
+ll comb(ll n, ll k) // 注意组合数C(n,k) = C(n % p, k % p) * C(n / p, k / p);
 {
-    if(!b)
-    {
-        x=1,y=0;
-        return a;
+    n %= MOD;
+    if(n < k) return 0LL;
+    if(n == k || k == 0) return 1LL;
+    if(k > n - k) k = n - k;
+    ll t = k;
+    ll res = 1;
+    while(t) {
+        res = res * n % MOD;
+        n --;
+        t --;
     }
-    int d=exgcd(b,a%b,y,x);
-    y-=(a/b)*x;
-    return d;
+    res = res * inv[k] % MOD;
+    return res;
 }
-int gcd(int x,int y){return y==0?x:gcd(y,x%y);}
-int EXCRT(int a1,int a2,int r1,int r2)
+ll Lucas(ll n, ll m, ll p)
 {
-    int x,y;
-    int g=exgcd(r1,r2,x,y);
-    if((a2-a1)%g)return -1;
-    y=r2/g;
-    x*=(a2-a1)/g;
-    x=(x%y+y)%y;
-    a1+=x*r1;
-    return a1;
+        return m ? Lucas(n/p, m/p, p) * comb(n%p, m%p) % p : 1;
 }
-bool check(int mid,int k,int lc)//在1-mid的范围内，查找哪些数是满足情况的
+ 
+ 
+int main()
 {
-    int ans=0;
-    for(int i=1;i<=lim;++i)
-    {
-        if(!dp[i])continue;
-        if(mid>=dp[i])//如果当前两者相等的时间点
-        {
-            ans+=(mid-dp[i])/lc+1;
+    ll n, s;
+    f[0] = 1;
+    rep(i,1,20) f[i] = f[i-1] * i % MOD;
+    inv[20] = qmod(f[20], MOD-2, MOD);
+    per(i,19,0) inv[i] = (inv[i+1] * (i + 1)) % MOD;
+    scanf("%lld %lld", &n, &s);
+    rep(i,0,n-1) scanf("%lld",&x[i]);
+    ll res = 0;
+    rep (i,0,(1<<n)-1) {
+        ll sum = s;
+        ll o = 1;
+        rep (j,0,n-1) {
+            if((i>>j)&1) {
+                sum = sum - x[j] - 1;
+                o *= -1;
+                if(sum < 0) break;
+            }
         }
-        if(mid-ans<k)return false;//不相等的次数小于k,返回错误
+        if(sum < 0) continue;
+        res = (res + o * comb(n + sum - 1, n - 1)) % MOD;
     }
-    return mid-ans>=k;//不相等的次数大于k，会生气
+    res = (res % MOD + MOD) % MOD; //
+    printf("%lld\n", res);
+    return 0;
 }
-signed main()
-{
-  ios::sync_with_stdio(false);
-  cin.tie(nullptr);
-  int n,m,k,x;
-  cin>>n>>m>>k;
-  for(int i=1;i<=n;++i)cin>>x,row1[x]=i;
-  for(int i=1;i<=m;++i)cin>>x,row2[x]=i;
-  lim=2*max(n,m);
-  int lcm=m/gcd(m,n)*n;
-  int g=gcd(m,n);
-  for(int i=1;i<=lim;++i)
-  {
-    if(!row1[i]||!row2[i]||abs(row2[i]-row1[i])%g)continue;
-    dp[i]=EXCRT(row1[i],row2[i],n,m);
-  }
-  int l=0,r=1e18,mid;
-  while(l<=r)
-  {
-    m=(l+r)>>1;
-    if(check(m,k,lcm))r=m-1;
-    else l=m+1;
-  }
-  cout<<l<<endl;
-  return 0;
-}
+ 
