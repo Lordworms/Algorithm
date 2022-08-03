@@ -32,6 +32,7 @@ int C(int n,int m)
     }
     return up*get_inv(down);
 }
+
 int main()
 {
   ios::sync_with_stdio(false);
