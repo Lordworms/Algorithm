@@ -51,7 +51,7 @@ signed main()
     }
   }
   int ans=0;
-  for(int i=1;i<=LIM;++i)ans=(ans+mu[i]*(quick_pow(2,cnt[i])-1)%mod)%mod;
+  for(int i=1;i<=LIM;++i)ans=(ans+mu[i]*(quick_pow(2,cnt[i])-1)%mod)%mod;//1开始
   cout<<(ans+mod)%mod<<endl;
   return 0;
 }
