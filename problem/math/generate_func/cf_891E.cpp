@@ -10,7 +10,7 @@ const int MAXN=5010;
 int quick_pow(int base,int exp){int ans=1;for(;exp;exp>>=1,base=base*base%mod)if(exp&1)ans=ans*base%mod;return ans;}
 int n,k,x;
 int f[MAXN];
-int main()
+signed main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
