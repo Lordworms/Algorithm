@@ -28,6 +28,7 @@ void update(int c,int x,int v)
     else update(c<<1|1,x,v);
     tree[c].v=tree[c<<1].v+tree[c<<1|1].v;
 }
+//调用方式query(c,start,end)
 int query(int c,int l,int r)
 {
     if(l<=tree[c].v&&r>=tree[c].r)return tree[c].v;
