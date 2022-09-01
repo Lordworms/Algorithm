@@ -5,17 +5,18 @@
 */
 #include <bits/stdc++.h>
 using namespace std;
+int mod;
 template<typename T>
 class segmentTree{
     vector<T>tree,lazy;
-    vector<T>*arr;
+    vector<T>arr;
     int n,root,n4,end;
     //build(0,n,1)
     void build(int l,int r,int c)
     {
         if(s==t)
         {
-            tree[c]=(*arr)[s];
+            tree[c]=arr[s];
             return;
         }
         int m=(l+r)>>1;
@@ -23,7 +24,7 @@ class segmentTree{
         build(m+1,r,c<<1|1);
         tree[c]=tree[c<<1]+tree[c<<1|1];
     }
-    void push_down(int cl,int cr,int c)//传递懒标记
+    void push_down(int cl,int cr,int c)//传递懒标记，懒标记的值已经作用过该层了，只需要往下传家就行惹
     {
         int cm=(cl+cr)>>1;    
         if(lazy[c]&&cl!=cr)
@@ -69,6 +70,16 @@ class segmentTree{
         range_add(l,r,cl,cm,c<<1,val);
         range_add(l,r,cm+1,cr,c<<1|1,val);
         push_up(c);
+    }
+public:
+    segmentTree(vector<T>arr)
+    {
+        for(auto i:arr)this->arr.push_back(i);
+        n=arr.size();
+        n4=4*n;
+        end=n-1;
+        root=1;
+        build(0,end,1);
     }
 };
 int main()
