@@ -24,7 +24,7 @@ void dfs(int now,int f)
     }
     for(int i=0;i<E[now].size();++i)
     {
-       if(E[now][i]==f)continue;
+       if(E[now][i]==f)continue;//不是now
        //cost[E[now][i]][0]=W[now][i];
        dfs(E[now][i],now);
     }
@@ -54,23 +54,4 @@ void init()
     memset(fa,0,sizeof(fa));
     memset(cost,0,sizeof(cost));
     memset(dep,0,sizeof(dep));
-}
-int main()
-{
-  ios::sync_with_stdio(false);
-  cin.tie(nullptr);
-  cin>>n;
-  int u,v;
-  for(int i=0;i<n-1;++i)
-  {
-    cin>>u>>v;
-    E[u].push_back(v);
-    E[v].push_back(u);
-  }
-  dfs(1,0);
-  while(cin>>u>>v)
-  {
-	cout<<LCA(u,v)<<endl;
-  }
-  return 0;
 }
