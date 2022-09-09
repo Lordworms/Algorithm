@@ -1,63 +1,47 @@
-#include<bits/stdc++.h>
-#define int long long
+#include <bits/stdc++.h>
 using namespace std;
-const int maxm=1e6+5;
-char b[maxm];
-char n[maxm];
-int c;
-int ppow(int a,int b,int mod){
-    int ans=1%mod;a%=mod;
-    while(b){
-        if(b&1)ans=ans*a%mod;
-        a=a*a%mod;
-        b>>=1;
+vector<bool>vis;
+vector<vector<int>>newG;
+bool ans=false;
+void dfs(int now,int fa)
+{
+    vis[now]=true;
+    for(int nxt:newG[now])
+    {
+       if(vis[nxt]==true&&nxt!=fa){ans=false;return;}
+       dfs(nxt,now);
     }
-    return ans;
 }
-int phi(int n){
-    int ans=n;
-    for(int i=2;i*i<=n;i++){
-        if(n%i==0){
-            ans=ans/i*(i-1);
-            while(n%i==0)n/=i;
-        }
-    }
-    if(n!=1)ans=ans/n*(n-1);
-    return ans;
+bool solution(int n, vector<vector<int>> g, vector<int> v) {
+   unordered_set<int>st;
+   for(int p:v)st.insert(p);
+   newG.resize(n+1);
+   vis.resize(n+1,false);
+   vector<int>in(n+1,0);
+   for(auto edge:g)
+   {
+       if(st.count(edge[0])&&!st.count(edge[1])){newG[v[0]].push_back(edge[1]);in[edge[1]]++;}
+       else if(st.count(edge[1])&&!st.count(edge[0])){newG[edge[0]].push_back(v[0]);in[v[0]]++;}
+       else if(st.count(edge[1]&&st.count(edge[0])))continue;
+       else {newG[edge[0]].push_back(edge[1]);in[edge[1]]++;}
+   }
+   int now;
+   for(int i=1;i<=n;++i)
+   {
+       if((st.count(i)&&in[v[0]])||in[i])continue;
+       now=st.count(i)?v[0]:i;
+       break;
+   }
+   dfs(now,0);
+   return ans?false:true;
 }
-signed main(){
-    ios::sync_with_stdio(0);
-    cin>>b>>n>>c;
-    int lenb=strlen(b);
-    int lenn=strlen(n);
-    //底数b%c
-    int base=0;
-    for(int i=0;i<lenb;i++){
-        base=(base*10+b[i]-'0')%c;
-    }
-    //指数
-    for(int i=lenn-1;i>=0;i--){
-        n[i]--;
-        if(n[i]<0){
-            n[i]+=10;
-            n[i-1]--;
-        }else{
-            break;
-        }
-    }
-    int phi1=phi(c);
-    int p=0;
-    int f=0;
-    for(int i=0;i<lenn;i++){
-        p=p*10+n[i]-'0';
-        if(p>=phi1)f=1;
-        p%=phi1;
-    }
-    if(f)p+=phi1;
-    //
-    int ans=(base-1)*ppow(base,p,c)%c;
-    ans=(ans%c+c)%c;
-    if(ans)cout<<ans<<endl;
-    else cout<<c<<endl;
-    return 0;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  vector<vector<int>>G={{1, 2}, {2, 3}, {2, 4}, {2, 5}, {4, 6}, {5, 6}};
+  solution(6,G,{1,2,4});
+  return 0;
+
 }
