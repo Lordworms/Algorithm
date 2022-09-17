@@ -1,60 +1,50 @@
+/*
+  1.我们按照j对v的模数来进行分类
+  那么对应的解就如下所示
+  dp[j]=max{dp[j-v]+w,dp[j-2*v]+2*w.....dp[j-k*v]+k*w}
+  改写一下
+  dp[j+kv]=max{dp[j],dp[j+1*v]-w,dp[j+2*v]-2*w....dp[j+k*v]-k*w}+k*w
+  下面的k就是这里的j+kv
+  所以比较的时候直接比较(k-j)/v*w和(q[l]-j)/v*w;
+  转化为经典的单调队列问题，即在num的范围内求出最值
+  单调队列从尾到头递增！！！
+  单调队列从尾到头递增！！！
+  单调队列从尾到头递增！！！
+  单调队列从尾到头递增！！！
+  单调队列从尾到头递增！！！
+  单调队列从尾到头递增！！！
+  单调队列从尾到头递增！！！
+
+*/
 #include <bits/stdc++.h>
 using namespace std;
-const int yzh = 1000000007, N = 1000+5;
-
-int f[N][N], sz[N], t, n, u, v, g[N], fac[N], ifac[N];
-struct tt {
-    int to, nxt, c;//0->
-} edge[N<<1];
-int path[N], top;
-char sign;
-
-int C(int n, int m) {return 1ll*fac[n]*ifac[m]%yzh*ifac[n-m]%yzh; }
-void dfs(int u, int fa) {
-    f[u][1] = sz[u] = 1;
-    for (int v, i = path[u]; i; i = edge[i].nxt)
-        if ((v = edge[i].to) != fa) {
-            dfs(v, u);
-            memcpy(g, f[u], sizeof(g));
-            memset(f[u], 0, sizeof(g));
-            if (edge[i].c == 0) {
-                for (int i = 1; i <= sz[u]; i++)
-                    for (int k = i; k <= i+sz[v]-1; k++)
-                        (f[u][k] += 1ll*C(k-1, i-1)*C(sz[u]+sz[v]-k, sz[u]-i)%yzh*g[i]%yzh*(f[v][sz[v]]-f[v][k-i])%yzh) %= yzh;
-            } else {
-                for (int i = 1; i <= sz[u]; i++)
-                    for (int k = i+1; k <= i+sz[v]; k++)
-                        (f[u][k] += 1ll*C(k-1, i-1)*C(sz[u]+sz[v]-k, sz[u]-i)%yzh*g[i]%yzh*f[v][k-i]%yzh) %= yzh;               
-            }
-            sz[u] += sz[v];
-        }
-    for (int i = 1; i <= n; i++) (f[u][i] += f[u][i-1]) %= yzh;
-}
-void add(int u, int v, int c) {
-    edge[++top] = (tt){v, path[u], c};
-    path[u] = top;  
-}
-int main() {
-    n = 1000;
-    ifac[0] = ifac[1] = fac[0] = 1;
-    for (int i = 2; i <= n; i++) ifac[i] = -1ll*yzh/i*ifac[yzh%i]%yzh;
-    for (int i = 1; i <= n; i++)
-        ifac[i] = 1ll*ifac[i]*ifac[i-1]%yzh,
-        fac[i] = 1ll*i*fac[i-1]%yzh;
-    scanf("%d", &t);
-    while (t--) {
-        scanf("%d", &n); top = 0;
-        for (int i = 1; i <= n; i++) {
-            path[i] = sz[i] = 0;
-            for (int j = 1; j <= n; j++) f[i][j] = 0;
-        }
-        for (int i = 1; i < n; i++) {
-            scanf("%d %c %d", &u, &sign, &v); ++u, ++v;
-            if (sign == '<') add(u, v, 0), add(v, u, 1);
-            else add(u, v, 1), add(v, u, 0);
-        }
-        dfs(1, 0);
-        printf("%d\n", (f[1][n]+yzh)%yzh);
+const int MAXN=1e6+10;
+int dp[MAXN],pre[MAXN];
+int m,n;
+int q[MAXN];
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cin>>n>>m;
+  int v,w,num;
+  for(int i=0;i<n;++i)
+  {
+    cin>>v>>w>>num;
+    memcpy(pre,dp,sizeof(dp));
+    for(int j=0;j<v;++j)
+    {
+      int l=0,r=-1;
+      for(int k=j;k<=m;k+=v)
+      {
+        dp[k]=pre[k];
+        while(l<=r&&k-num*v>q[l])++l;
+        while(l<=r&&pre[k]-(k-j)/v*w>=pre[q[r]]-(q[r]-j)/v*w)--r;
+        if(l<=r)dp[k]=max(dp[k],pre[q[l]]+(k-q[l])/v*w);
+        q[++r]=k;
+      }
     }
-    return 0;
+  }
+  cout<<dp[m]<<endl;
+  return 0;
 }

@@ -23,7 +23,7 @@ int main()
     int k=1;//加在下面会tle
     for(int j=1;j<=n;++j)
     {
-        for(;k<=min(1LL*n,1LL*(t[i]-t[i-1])*d+j);++k)//只在有新值进来的时候更新k
+        for(;k<=min(1LL*n,1LL*(t[i]-t[i-1])*d+j);++k)
         {   
             while(h<=ta&&dp[pre][k]>=dp[pre][q[ta]])--ta;
             q[++ta]=k;
