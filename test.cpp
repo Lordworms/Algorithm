@@ -1,36 +1,78 @@
-/*
-   用HNOI2008玩具装箱这道题来进行讲解，具体的自己可以看原题 
-  注意都要用double
-*/
 #include <bits/stdc++.h>
-using namespace std;
-using ll=long long;
-using db=double;
-const int MAXN=5e4+10;
-int L,n;
-db dp[MAXN],sum[MAXN];
-int Q[MAXN];
-inline db a(int i){return sum[i]+i;}
-inline db b(int i){return a(i)+L+1;}
-inline db X(int i){return b(i);}
-inline db Y(int i){return dp[i]+b(i)*b(i);}
-inline db slope(int i,int j){return (Y(i)-Y(j))/(X(i)-X(j));}
-int main()
-{
-   scanf("%d%d",&n,&L);
-  for(int i=1;i<=n;++i)
-  {
-     scanf("%lf",&sum[i]);
-    sum[i]+=sum[i-1];
-  }
-  int l=1,r=1;
-  for(int i=1;i<=n;++i)
-  {
-    while(l<r&&slope(Q[l],Q[l+1])<2*a(i))++l;
-    dp[i]=dp[Q[l]]+(a(i)-b(Q[l]))*(a(i)-b(Q[l]));
-    while(l<r&&slope(i,Q[r-1]<slope(Q[r-1],Q[r])))--r;
-    Q[++r]=i;
-  }
- printf("%lld\n",(ll)dp[n]);
-  return 0;
+
+using i64 = long long;
+
+constexpr i64 inf = 1E18;
+
+void solve() {
+    int n, x, y;
+    std::cin >> n >> x >> y;
+    
+    std::vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        char ch;
+        std::cin >> ch;
+        a[i] ^= ch - '0';
+    }
+    for (int i = 0; i < n; i++) {
+        char ch;
+        std::cin >> ch;
+        a[i] ^= ch - '0';
+    }
+    
+    int cnt = std::accumulate(a.begin(), a.end(), 0);
+    if (cnt % 2 != 0) {
+        std::cout << -1 << "\n";
+        return;
+    }
+    std::vector<int> pos;
+    
+    for (int i = 0; i < n; i++) {
+        if (a[i]) {
+            pos.push_back(i);
+        }
+    }
+    
+    if (x >= y) {
+        if (cnt != 2 || pos[1] > pos[0] + 1) {
+            std::cout << 1LL * (cnt / 2) * y << "\n";
+            return;
+        }
+        int ans = x;
+        if (pos[0] > 1 || pos[1] < n - 2) {
+            ans = std::min(ans, 2 * y);
+        } else if (n >= 4) {
+            ans = std::min(1LL * ans, 3LL * y);
+        }
+        std::cout << ans << "\n";
+        return;
+    }
+    
+    const int N = pos.size();
+    std::vector<i64> dp(N + 1, inf);
+    dp[0] = 0;
+    for (int i = 0; i < N; i += 2) {
+        i64 cur = 0;
+        for (int j = i + 2; j <= N; j += 2) {
+            if (j >= i + 4) {
+                cur += 1LL * x * (pos[j - 2] - pos[j - 3]);
+            }
+            dp[j] = std::min(dp[j], dp[i] + std::min(1LL * y, 1LL * x * (pos[j - 1] - pos[i])) + cur);
+        }
+    }
+    std::cout << dp[N] << "\n";
+}
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    
+    int t;
+    std::cin >> t;
+    
+    while (t--) {
+        solve();
+    }
+    
+    return 0;
 }
