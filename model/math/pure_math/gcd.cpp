@@ -36,7 +36,7 @@ int exgcd_f(int a,int b,int& x,int& y)
     {
         x=1,y=0;
         return a;
-    }
+    }t
     int d=exgcd(b,a%b,x,y);
     int t=x;
     x=y;

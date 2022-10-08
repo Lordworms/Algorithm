@@ -42,7 +42,7 @@ bool kmp(string ori,string pat)
 } 
 int main()
 {
-    cout<<kmp("ababab","ababab");
+    cout<<kmp("a","abcabcdabc");
     return 0;
 
 }
