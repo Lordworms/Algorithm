@@ -2,54 +2,35 @@
 using namespace std;
 class Solution {
 public:
-    int candy(vector<int>& rat) {
-        int n=rat.size(),ans=n;
-        stack<int>s;
-        vector<int>rm(n),lm(n);
-        for(int i=0;i<n;++i)
+    const static int MAXN=5e4+10;
+    const int MOD=1e9+7;
+    int numberOfPaths(vector<vector<int>>& grid, int k) {
+        int cur,pre;
+        int m=grid.size(),n=grid[0].size();
+        vector<vector<vector<int>>>dp(2,vector<vector<int>>(n,vector<int>(k,0)));
+        dp[0][0][grid[0][0]%k]=1;
+        for(int i=0;i<m;++i)
         {
-            while(!s.empty()&&rat[i]>rat[s.top()])
+          cur=i&1,pre=cur^1;
+          for(int j=0;j<n;++j)
+          {
+            int now=grid[i][j];
+            for(int x=0;x<k;++x)
             {
-                rm[s.top()]=i;
-                s.pop();
+              if(i>0)
+              {
+                 dp[cur][j][(now+x)%k]+=dp[pre][j][x];
+                 dp[cur][j][(now+x)%k]%=MOD;
+              }
+              if(j>0)
+              {
+                 dp[cur][j][(now+x)%k]+=dp[cur][j-1][x];
+                 dp[cur][j][(now+x)%k]%=MOD;
+              }
             }
-            if(s.empty()||rat[i]<rat[s.top()])s.push(i);
+          }
         }
-        while(!s.empty())
-        {
-            rm[s.top()]=n+1;
-            s.pop();
-        }
-        for(int i=n-1;i>=0;--i)
-        {
-            while(!s.empty()&&rat[i]>rat[s.top()])
-            {
-                lm[s.top()]=i;
-                s.pop();
-            }
-            if(s.empty()||rat[i]<rat[s.top()])s.push(i);
-        }
-        while(!s.empty())
-        {
-            lm[s.top()]=-1;
-            s.pop();
-        }
-        for(int i=0;i<n;++i)
-        {
-            if(i==0)
-            {
-                if(rm[i]>i+1)++ans;
-            }
-            else if(i==n-1)
-            {
-                if(lm[i]<i-1)++ans;
-            }
-            else
-            {
-                if(rm[i]>i+1&&lm[i]<i-1)++ans;
-            }
-        }
-        return ans;
+        return dp[cur][n-1][0];     
     }
 };
 int main()
@@ -57,7 +38,7 @@ int main()
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
   Solution sol;
-  vector<int>vec={1,0,2};
-  sol.candy(vec);
+  vector<vector<int>>path={{1},{5},{3},{7},{3},{2},{3},{5}};
+  sol.numberOfPaths(path,29);
   return 0;
 }

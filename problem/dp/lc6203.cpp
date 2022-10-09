@@ -1,3 +1,7 @@
+/*
+    别给老子多想，就直接全量的数组，别整什么cur，pre
+
+*/
 #include <bits/stdc++.h>
 using namespace std;
 using ll=long long;
