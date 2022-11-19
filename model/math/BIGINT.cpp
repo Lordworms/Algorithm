@@ -1,12 +1,3 @@
-/*
- for an ant in [0,2i-1], it could survice only if it goes to left and 
- the left consecutive (i-1)/2 ants go to right(it can get total (i+1)/2) heavy and survice in the end
- so we get f(x)=1/(2^((i+1)/2))
- however, we did not consider the [2i,n] ants
- lets's think about the [2i,n] ants
- g(x) means the survice probability in [1,n]
- g(x)=probability(x can survice)*(1-sigma(x+1,n cannot survice))
-*/
 #include <bits/stdc++.h>
 using namespace std;
 template <typename T>
@@ -176,49 +167,23 @@ using Mint = Modular<VarMod>;
  
 constexpr int md = (int) 1e9 + 7;
 using Mint = Modular<std::integral_constant<decay<decltype(md)>::type, md>>;
-const int MOD=1e9+7;
-const int MAXN=1e6+10;
-int arr[MAXN];
-int fac[MAXN];
-int f[MAXN];
-void solve()
-{
-  int n;
-  cin>>n;
-  vector<Mint>ans(n);
-  Mint base=Mint(1)/2;
-  for(int i=0;i<n;++i)
-  {
-    auto exp=i/2+1;
-    if(i==0||i==n-1)
-    {
-      exp-=1;
-    }
-    ans[i]=power(base,exp);
+ 
+vector<Mint> fact(1, 1);
+vector<Mint> inv_fact(1, 1);
+ 
+Mint C(int n, int k) {
+  if (k < 0 || k > n) {
+    return 0;
   }
-  Mint sum=0;
-  int j=n;
-  for(int i=n-1;i>=0;--i)
-  {
-    while(j>2*i+1)sum+=ans[--j];
-    ans[i]*=(1-sum);
+  while ((int) fact.size() < n + 1) {
+    fact.push_back(fact.back() * (int) fact.size());
+    inv_fact.push_back(1 / fact.back());
   }
-  for(int i=0;i<n;++i)cout<<ans[i]<<"\n";
+  return fact[n] * inv_fact[k] * inv_fact[n - k];
 }
 int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
-  #ifdef LOCAL
-  freopen("/Users/xiangyanxin/code/Algorithom/in.txt","r",stdin);
-  freopen("/Users/xiangyanxin/code/Algorithom/out.txt","w",stdout);
-  #endif
-  int t;
-  cin>>t;
-
-  while(t--)
-  {
-    solve();
-  }
   return 0;
 }
