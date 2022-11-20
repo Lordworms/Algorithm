@@ -7,6 +7,32 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int MAXN=1e5+5;
+struct fenwick
+{
+	int PartialSum[MAXN];
+	fenwick()
+	{
+		for(int i = 0; i < MAXN; i++)PartialSum[i] = 0;
+	}
+	inline void add(int index, bool increase)
+	{
+		while(index < MAXN)
+		{
+			PartialSum[index] += (increase? 1 : -1);
+			index += index&-index;
+		}
+	}
+	inline int get(int index)
+	{
+		int sum = 0;
+		while(index)
+		{
+			sum += PartialSum[index];
+			index -= index&-index;
+		}
+		return sum;
+	}
+};
 class Solution {
 public:
     vector<int>discrete(vector<int>nums)
