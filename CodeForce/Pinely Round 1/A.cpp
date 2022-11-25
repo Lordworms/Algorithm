@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long;
+void solve()
+{
+    int n,a,b;
+    cin>>n>>a>>b;
+    if(n==a&&n==b)
+    {
+        cout<<"Yes"<<"\n";
+        return;
+    }
+    if(n-a-b<2)
+    {
+        cout<<"No"<<"\n";
+        return;
+    } 
+    cout<<"Yes"<<"\n";
+}
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  #ifdef LOCAL
+  freopen("/Users/xiangyanxin/code/Algorithom/in.txt","r",stdin);
+  freopen("/Users/xiangyanxin/code/Algorithom/out.txt","w",stdout);
+  #endif
+  int T;
+  cin>>T;
+  while(T--)
+  {
+    solve();
+  }
+  return 0;
+}
