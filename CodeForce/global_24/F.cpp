@@ -1,7 +1,8 @@
 /*
 the w between i and j is f(i,i)+f(j,j)-2*f(i,j)
 (think about why!)
-why should we sort
+why should we sort the edge in decrease order:如果i,j不直接相连
+那么存在f(i,k)>f(i,j)所以我们要重构一颗最大生成树
 */
 #include <bits/stdc++.h>
 using namespace std;
