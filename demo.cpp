@@ -1,99 +1,244 @@
-/**
- *    author:  tourist
- *    created: 20.11.2022 19:01:17       
-**/
 #include <bits/stdc++.h>
 
-using namespace std;
+using i64 = long long;
+
+constexpr int P = 1000000007;
+using i64 = long long;
+// assume -P <= x < 2P
+int norm(int x) {
+    if (x < 0) {
+        x += P;
+    }
+    if (x >= P) {
+        x -= P;
+    }
+    return x;
+}
+template<class T>
+T power(T a, i64 b) {
+    T res = 1;
+    for (; b; b /= 2, a *= a) {
+        if (b % 2) {
+            res *= a;
+        }
+    }
+    return res;
+}
+struct Z {
+    int x;
+    Z(int x = 0) : x(norm(x)) {}
+    Z(i64 x) : x(norm(x % P)) {}
+    int val() const {
+        return x;
+    }
+    Z operator-() const {
+        return Z(norm(P - x));
+    }
+    Z inv() const {
+        assert(x != 0);
+        return power(*this, P - 2);
+    }
+    Z &operator*=(const Z &rhs) {
+        x = i64(x) * rhs.x % P;
+        return *this;
+    }
+    Z &operator+=(const Z &rhs) {
+        x = norm(x + rhs.x);
+        return *this;
+    }
+    Z &operator-=(const Z &rhs) {
+        x = norm(x - rhs.x);
+        return *this;
+    }
+    Z &operator/=(const Z &rhs) {
+        return *this *= rhs.inv();
+    }
+    friend Z operator*(const Z &lhs, const Z &rhs) {
+        Z res = lhs;
+        res *= rhs;
+        return res;
+    }
+    friend Z operator+(const Z &lhs, const Z &rhs) {
+        Z res = lhs;
+        res += rhs;
+        return res;
+    }
+    friend Z operator-(const Z &lhs, const Z &rhs) {
+        Z res = lhs;
+        res -= rhs;
+        return res;
+    }
+    friend Z operator/(const Z &lhs, const Z &rhs) {
+        Z res = lhs;
+        res /= rhs;
+        return res;
+    }
+    friend std::istream &operator>>(std::istream &is, Z &a) {
+        i64 v;
+        is >> v;
+        a = Z(v);
+        return is;
+    }
+    friend std::ostream &operator<<(std::ostream &os, const Z &a) {
+        return os << a.val();
+    }
+};
+
+constexpr int N = 4E6;
+
+std::vector<Z> fac(N + 1), invfac(N + 1);
+
+Z binom(int n, int m) {
+    if (n < m || m < 0) {
+        return 0;
+    }
+    return fac[n] * invfac[m] * invfac[n - m];
+}
+
+Z work(std::vector<int> p) {
+    const int n = p.size();
+    Z ans = 0;
+    
+    for (int t = 0; t < 2; t++) {
+        std::vector dp(n, std::vector<Z>(n));
+        for (int i = t; i < n; i += 2) {
+            dp[i][i] = (p[i] == 0 || p[i] == -1);
+        }
+        
+        for (int i = n - 1 - (n % 2 == t); i >= 0; i -= 2) {
+            int x = 0;
+            for (int j = i; j < n; j += 2) {
+                x++;
+                if (i > j) {
+                    continue;
+                }
+                int k = i < 2 ? !t : i - 2;
+                if (x >= n - 1 && (p[k] == -1 || p[k] == n - 1)) {
+                    ans += dp[i][j];
+                    continue;
+                }
+                if (p[k] == -1 || p[k] == x) {
+                    dp[k][j] += dp[i][j];
+                }
+                k = j + 2 >= n ? n - 1 - (n % 2 == !t) : j + 2;
+                if (p[k] == -1 || p[k] == x) {
+                    dp[i][k] += dp[i][j];
+                }
+            }
+            for (int j = n - 1 - (n % 2 == !t); j >= 0; j -= 2) {
+                x++;
+                if (i > j) {
+                    continue;
+                }
+                if (x >= n - 1 && j >= 2 && (p[j - 2] == -1 || p[j - 2] == n - 1)) {
+                    ans += dp[i][j];
+                    continue;
+                }
+                int k = i < 2 ? !t : i - 2;
+                if (p[k] == -1 || p[k] == x) {
+                    dp[k][j] += dp[i][j];
+                }
+                if (j >= 2) {
+                    k = j - 2;
+                    if (p[k] == -1 || p[k] == x) {
+                        dp[i][k] += dp[i][j];
+                    }
+                }
+            }
+        }
+        for (int i = !t; i < n; i += 2) {
+            int x = i / 2 + 1;
+            for (int j = t; j < n; j += 2) {
+                x++;
+                if (i > j) {
+                    continue;
+                }
+                if (x >= n - 1 && i + 2 < n && (p[i + 2] == -1 || p[i + 2] == n - 1)) {
+                    ans += dp[i][j];
+                    continue;
+                }
+                int k;
+                if (i + 2 < n) {
+                    k = i + 2;
+                    if (p[k] == -1 || p[k] == x) {
+                        dp[k][j] += dp[i][j];
+                    }
+                }
+                k = j + 2 >= n ? n - 1 - (n % 2 == !t) : j + 2;
+                if (p[k] == -1 || p[k] == x) {
+                    dp[i][k] += dp[i][j];
+                }
+            }
+            for (int j = n - 1 - (n % 2 == !t); j > i; j -= 2) {
+                x++;
+                if (i > j) {
+                    continue;
+                }
+                if (x >= n - 1 && i + 2 < n && (p[i + 2] == -1 || p[i + 2] == n - 1)) {
+                    ans += dp[i][j];
+                    continue;
+                }
+                int k;
+                if (i + 2 < n) {
+                    k = i + 2;
+                    if (p[k] == -1 || p[k] == x) {
+                        dp[k][j] += dp[i][j];
+                    }
+                }
+                if (j >= 2) {
+                    k = j - 2;
+                    if (p[k] == -1 || p[k] == x) {
+                        dp[i][k] += dp[i][j];
+                    }
+                }
+            }
+        }
+        // for (int i = 0; i < n; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         std::cerr << dp[i][j] << " \n"[j == n - 1];
+        //     }
+        // }
+    }
+    
+    return ans;
+}
+
+void solve() {
+    int n;
+    std::cin >> n;
+    
+    std::vector<int> p(n);
+    for (int i = 0; i < n; i++) {
+        std::cin >> p[i];
+        if (p[i] != -1) {
+            p[i]--;
+        }
+    }
+    
+    auto ans = work(p);
+    
+    std::cout << ans << "\n";
+}
 
 int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(0);
-  #ifdef LOCAL
-  freopen("/Users/xiangyanxin/code/Algorithom/in.txt","r",stdin);
-  freopen("/Users/xiangyanxin/code/Algorithom/out.txt","w",stdout);
-  #endif
-  int tt;
-  cin >> tt;
-  while (tt--) {
-    int n;
-    cin >> n;
-    vector<string> s(n);
-    vector<int> deg(n);
-    for (int i = 0; i < n; i++) {
-      cin >> s[i];
-      for (int j = 0; j < n; j++) {
-        if (s[i][j] == '1') {
-          deg[i] += 1;//find the degree of i 
-        }
-      }
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    
+    fac[0] = 1;
+    for (int i = 1; i <= N; i++) {
+        fac[i] = fac[i - 1] * i;
     }
-    vector<bool> was(n, false);
-    vector<vector<int>> all;
-    for (int st = 0; st < n; st++) {
-      if (was[st]) {
-        continue;
-      }
-      vector<int> que(1, st);
-      was[st] = true;
-      for (int b = 0; b < (int) que.size(); b++) {
-        for (int i = 0; i < n; i++) {
-          if (!was[i] && s[que[b]][i] == '1') {
-            was[i] = true;
-            que.push_back(i);
-          }
-        }
-      }
-      all.push_back(que);
-    }//all contains a point and its adjacent points
-    if (all.size() == 1) {
-      cout << 0 << '\n';
-      continue;
+    invfac[N] = fac[N].inv();
+    for (int i = N; i; i--) {
+        invfac[i - 1] = invfac[i] * i;
     }
-	//all contains all cliques
-    int one = -1;
-    for (auto& v : all) {
-      int sz = (int) v.size();
-      if (sz == 1) {//it is the feasible vertex
-        one = v[0];
-        break;
-      }
-      int cnt = 0;
-      for (int x : v) {
-        if (deg[x] == sz - 1) {//whether it is fully connected or intermediately connected
-          cnt += 1;
-        }
-      }
-      if (cnt == sz) {//fully connected
-        continue;
-      }
-      if (cnt == 0) {
-        one = v.back();
-        break;
-      }
-      for (int x : v) {
-        if (deg[x] < sz - 1) {
-          one = x;
-          break;
-        }
-      }
-      break;
+    
+    int t;
+    std::cin >> t;
+    
+    while (t--) {
+        solve();
     }
-    if (one != -1) {
-      cout << 1 << '\n';
-      cout << one + 1 << '\n';
-      continue;
-    }
-    if (all.size() > 2) {
-      cout << 2 << '\n';
-      cout << all[0][0] + 1 << " " << all[1][0] + 1 << '\n';
-      continue;
-    }
-    auto& v = (all[0].size() < all[1].size() ? all[0] : all[1]);
-    cout << v.size() << '\n';
-    for (int i = 0; i < (int) v.size(); i++) {
-      cout << v[i] + 1 << " \n"[i == (int) v.size() - 1];
-    }
-  }
-  return 0;
+    
+    return 0;
 }
