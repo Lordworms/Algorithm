@@ -19,16 +19,17 @@
 */
 #include <bits/stdc++.h>
 using namespace std;
-int exgcd(int a,int b,int& x,int& y)
-{
-    if(!b)
-    {
-        x=1,y=0;
-        return a;
-    }
-    int d=exgcd(b,a%b,y,x);
-    y-=(a/b)*x;
-    return d;
+int exgcd(int a, int b, int &x, int &y) {
+  if (!b) {
+    x = 1;
+    y = 0;
+    return a;
+  }
+  int d = exgcd(b, a % b, x, y);
+  int t = x;
+  x = y;
+  y = t - (a / b) * y;
+  return d;
 }
 int exgcd_f(int a,int b,int& x,int& y)
 {
@@ -36,7 +37,7 @@ int exgcd_f(int a,int b,int& x,int& y)
     {
         x=1,y=0;
         return a;
-    }t
+    }
     int d=exgcd(b,a%b,x,y);
     int t=x;
     x=y;
