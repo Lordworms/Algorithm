@@ -17,9 +17,9 @@ int quick_pow(int x,int exp,int p)
       }
       return ans;
 }
+int inv[MAXN];
 void init_inv(int n,int mod,int p)//想想怎么证明
 {
-    int inv[MAXN];
     memset(inv,0,sizeof(inv));
     inv[1]=1;
     for(int i=2;i<=n;++i)
