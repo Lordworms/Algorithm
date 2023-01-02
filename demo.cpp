@@ -1,61 +1,74 @@
 #include <bits/stdc++.h>
 using namespace std;
-using ll=long long;
-vector<int>dig;
-const int N=15;
-ll dp[N][N][2][2];
-ll dfs(int pos,ll sum,bool zero,bool flag,int d)
-{
-    if(pos==0)return sum;
-    if(~dp[pos][sum][zero][flag])return dp[pos][sum][zero][flag];
-    ll &res=dp[pos][sum][zero][flag];
-	res=0;
-    int lim=flag?dig[pos]:9;
-    for(int i=0;i<=lim;++i)
+class Solution {
+public:
+    using ll=long long;
+    struct node
     {
-        res+=dfs(pos-1,sum+((i==d)&&!(zero&&!i)),zero&&!i,flag&&i==lim,d);
+        int id;
+        ll st,pr;
+    };
+    vector<int> getOrder(vector<vector<int>>& tasks) {
+        int now=INT_MAX;
+        for(int i=0;i<tasks.size();++i)
+        {
+            now=min(now,tasks[i][0]);
+        }
+        auto cmp=[&](node a,node b)
+        {
+            if(a.pr==b.pr)
+            {
+                return a.st>b.st;
+            }
+            return a.pr>b.pr;
+        }; 
+        vector<int>ans;
+        priority_queue<node,vector<node>,decltype(cmp)>q(cmp);
+        for(int i=0;i<tasks.size();++i)
+        {
+            q.push({i,tasks[i][0],tasks[i][1]});
+        }
+        vector<node>tmp;
+        while(!q.empty())
+        {
+           while(!q.empty()&&q.top().st>now)
+           {
+               tmp.push_back(q.top());
+               q.pop();
+           }
+           node tt;
+           bool flag=false;
+           if(q.empty()&&tmp.size())
+           {
+               tt=tmp[0];
+               flag=true;
+           }
+           else
+           {
+               tt=q.top();
+               q.pop();
+           }
+           now+=tt.pr;
+           ans.push_back(tt.id);
+           int start=0;
+           if(flag)
+           {
+               start++;
+           }
+           for(int i=start;i<tmp.size();++i)
+           {
+               q.push(tmp[i]);
+           }
+        }
+        return ans;
     }
-    return res;
-}
-void trans(ll num)
-{
-    memset(dp,-1,sizeof(dp));
-    dig.clear();
-    dig.push_back(0);
-    while(num)
-    {
-        dig.push_back(num%10);
-        num/=10;
-    }
-}
-void solve()
-{
-  ll l,r;
-  cin>>l>>r;
-  for(int i=0;i<10;++i)
-  {
-    ll rans,lans;
-    trans(l-1);
-    lans=dfs(dig.size()-1,0,1,1,i);//第一位只能枚举到dig[pos];
-    trans(r);
-    rans=dfs(dig.size()-1,0ll,1,1,i);
-    cout<<rans-lans<<' ';
-  }
-  cout<<'\n';
-  return;
-}
+};
 int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
-  #ifdef LOCAL
-  freopen("/Users/xiangyanxin/code/Algorithom/in.txt","r",stdin);
-  freopen("/Users/xiangyanxin/code/Algorithom/out.txt","w",stdout);
-  #endif
-  int T=1;
-  while(T--)
-  {
-    solve();
-  }
+  Solution Sol;
+  vector<vector<int>>task={{1,2},{2,4},{3,2},{4,1}};
+  Sol.getOrder(task);
   return 0;
 }
