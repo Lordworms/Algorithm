@@ -15,7 +15,7 @@ vector<vector<int>>st;
 vector<int>lg;
 int query(int l,int r)
 {
-    return max(st[l][lg[r-l+1]],st[r-(1<<lg[r-l+1])+1][lg[r-l+1]]);
+    return max(st[l][lg[r-l+1]],st[r-(1<<lg[r-l+1])+1][lg[r-l+1]]);//不是区间对半分，是一人一个
 }
 void init_lg()
 {

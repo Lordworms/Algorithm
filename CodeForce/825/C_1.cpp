@@ -3,9 +3,17 @@ using namespace std;
 using ll=long long;
 void solve()
 {
-  int n;
+  int n,x;
   cin>>n;
-  cout<<(n-3)/3-1<<'\n';
+  vector<int>dp(n+1,0);
+  ll ans=0;
+  for(int i=1;i<=n;++i)
+  {
+    cin>>x;
+    dp[i]=min(dp[i-1]+1,x);
+    ans+=dp[i];
+  }
+  cout<<ans<<'\n';
   return;
 }
 int main()
