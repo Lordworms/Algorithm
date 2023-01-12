@@ -1,9 +1,14 @@
+/*
+   什么时候用斜率优化呢？
+   对于形如这样的方程:
+   dp[i]=max/min{a[i]*b[j]+c[i]+d[i]}
+   此时由于又有i又有j，不好用单调队列优化，所以这里考虑斜率优化
+
+*/
 #include <bits/stdc++.h>
 using namespace std;
 using ll=long long;
-#define int ll
 const int MOD=1e9+7;
-ll n,L;
 struct BLine
 {
   struct Point
@@ -27,7 +32,7 @@ struct BLine
   BLine()
   {
     slopes.push_back(-INF);
-    points.push_back(Point(0,L*L,0));
+    points.push_back(Point(0,0,0));
   }
   void add(Point p)
   {
@@ -48,26 +53,10 @@ struct BLine
 };
 void solve()
 {
-  cin>>n>>L;
-  ++L;
-  vector<ll>a(n+1),sum(n+1),dp(n+1);
-  BLine bl;
-  for(int i=1;i<=n;++i)
-  {
-    cin>>a[i];
-    sum[i]=sum[i-1]+a[i]+1;
-  }
-  int id;
-  for(int i=1;i<=n;++i)
-  {
-    int id=bl.query(2*sum[i]);
-    dp[i]=dp[id]+(sum[i]-sum[id]-L)*(sum[i]-sum[id]-L);
-    bl.add(BLine::Point(sum[i],dp[i]+(sum[i]+L)*(sum[i]+L),i));
-  }
-  cout<<dp[n]<<'\n';
+  
   return;
 }
-signed main()
+int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
@@ -75,7 +64,8 @@ signed main()
   freopen("/Users/xiangyanxin/code/Algorithom/in.txt","r",stdin);
   freopen("/Users/xiangyanxin/code/Algorithom/out.txt","w",stdout);
   #endif
-  int T=1;
+  int T;
+  cin>>T;
   while(T--)
   {
     solve();

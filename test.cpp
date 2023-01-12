@@ -1,28 +1,28 @@
-#include <bits/stdc++.h>
-using namespace std;
-class Solution {
-public:
-    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-        int n=nums.size();
-        vector<int>ans;
-        vector<int>q(n+1,0);
-        int l=0,r=-1;
-        for(int i=0;i<n;++i)
-        {
-            while(l<=r&&nums[i]>nums[q[r]])--r;
-            q[++r]=i;
-            if(i>=k-1&&i-q[l]+1>k)++l;
-            if(i>=k-1)ans.push_back(nums[q[l]]);
-        }
-        return ans;
+#include<cstring>
+#include<cstdio>
+#define LL long long
+#define Re LL
+const int N=5e4+5;
+LL i,j,n,L,h=1,t=0,Q[N],S[N],dp[N];
+//S[n]=∑C[i]+1, dp[i]=min(dp[j]+(S[i]-(S[j]+L+1))^2)，++L 
+//dp[i]=S[i]^2-2*S[i]*L+dp[j]+(S[j]+L)^2-2S[i]*S[j]
+//(2*S[i]) * S[j] + (dp[i]-S[i]^2+2S[i]L)=(dp[j]+(S[j]+L)^2)
+//   k     *  x   +           b          =        y
+inline LL min(Re a,Re b){return a<b?a:b;}
+inline LL X(Re j){return S[j];}
+inline LL Y(Re j){return dp[j]+(S[j]+L)*(S[j]+L);}
+inline long double slope(Re i,Re j){return (long double)(Y(j)-Y(i))/(X(j)-X(i));}//记得开long double 
+int main(){
+    scanf("%lld%lld",&n,&L);++L; 
+    for(i=1;i<=n;S[i]+=S[i-1]+1,++i)scanf("%lld",&S[i]);
+    Q[++t]=0;//重中之重 
+    for(i=1;i<=n;++i){
+        auto sl=slope(Q[h],Q[h+1]);
+        while(h<t&&slope(Q[h],Q[h+1])<=2*S[i])
+            ++h;//至少要有两个元素 h<t。出队判断时尽量加上等号 
+        dp[i]=dp[j=Q[h]]+(S[i]-S[j]-L)*(S[i]-S[j]-L);
+        while(h<t&&slope(Q[t-1],Q[t])>=slope(Q[t-1],i))--t;//至少要有两个元素 h<t。入队判断时尽量加上等号 
+        Q[++t]=i;
     }
-};
-int main()
-{
-  ios::sync_with_stdio(false);
-  cin.tie(nullptr);
-  Solution sol;
-  vector<int>arr={7,2,4};
-  sol.maxSlidingWindow(arr,2);
-  return 0;
+    printf("%lld",dp[n]);
 }
