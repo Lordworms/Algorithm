@@ -1,2 +1,7 @@
-1. 824 F : geometry
-2. 818 F:  network_flow
+1. geometry:
+    824 F
+    816 F
+2. network_flow
+    818 F
+3. trie
+    815 D2

@@ -50,6 +50,32 @@ struct Dijkstra
         }
     }
 };
+void dijkstr1a(vector<vector<pair<int, int>>> &g, vector<int> &dist) {
+    const int n = g.size();
+    vector<bool> used(n, false);
+    priority_queue<pair<int, int>> q;
+    for (int i = 0; i < n; ++i) {
+        q.push({ -dist[i], i });
+    }
+    while (!q.empty()) {
+        int v = q.top().second;
+        q.pop();
+        if (used[v]) {
+            continue;
+        }
+        used[v] = true;
+
+        for (auto p : g[v]) {
+            int u = p.first;
+            int w = p.second;
+            if (dist[u] > dist[v] + w) {
+                dist[u] = dist[v] + w;
+                q.push({ -dist[u], u });
+            }
+        }
+    }
+}
+
 int main()
 {
   ios::sync_with_stdio(false);
