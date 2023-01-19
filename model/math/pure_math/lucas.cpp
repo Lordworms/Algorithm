@@ -1,6 +1,5 @@
 /*
-题意：
-题解：
+用于求解c(n,m) mod p
 */
 #include <bits/stdc++.h>
 using namespace std;

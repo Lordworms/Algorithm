@@ -35,18 +35,18 @@ void solve()
   }
   for(int i=0;i<n;++i)
   {
-    for(int j=0;j<i;++j)
+    for(int j=i+1;j<n;++j)
     {
         if(a[i][j]==a[j][i]||dsu.same(i+1,j+1)||dsu.same(i+1,j+n+1))continue;
-        if(a[i][j]<a[j][i])//do not need to swap make i and j in different union
+        if(a[i][j]>a[j][i])//need to swap, make them different
         {
-            dsu.merge(i+1,j+n+1);//need to swap i
-            dsu.merge(i+1+n,j+1);// do not need to swap j
+            dsu.merge(i+1,j+n+1);
+            dsu.merge(i+n+1,j+1);
         }
-        else//need to swap make them in the same union
+        else//do not need to swap, make them the same
         {
             dsu.merge(i+1,j+1);
-            dsu.merge(i+1+n,j+1+n);
+            dsu.merge(i+n+1,j+n+1);
         }
     }
   }
