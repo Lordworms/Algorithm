@@ -1,37 +1,82 @@
-/*
-	重新认识一哈二分哈
-	现在有这样一个数组
-	[1,2,3,5,5,5,8,9]
-	有四个问题 				check	return
-	1.找到第一个>=5的元素  	  <5       r	
-	2.找到最后一个<5的元素	  <5		l
-	3.第一个>5的元素		 <=5		r	
-	4.最后一个<=5的元素		 <=5		l
-*/
 #include <bits/stdc++.h>
 using namespace std;
-//1.查找
-void bs(vector<int>arr,int k)
+vector<int>a={1,1,2,3,4,5,5,5,6,7,8,9,9,9,10};
+int binary_search_1(int l,int r,int tar)//return the last element less than 5
 {
-	int n=arr.size();
-	int l=-1,r=n+1,m;
-	while(l+1!=r)
-	{
-		m=(l+r)>>1;
-		if(check(m))
-		{
-			l=m;
-		}
-		else 
-		{
-			r=m;
-		}
-	}
-	return l/r
+  int m;
+  while(l<=r)
+  {
+    m=(l+r)>>1;
+    if(a[m]>=tar)
+    {
+      r=m-1;
+    }
+    else
+    {
+      l=m+1;
+    }
+  }
+  return r;
+}
+int binary_search_2(int l,int r,int tar)//return the last element less or equal than 5
+{
+   int m;
+   while(l<=r)
+   {
+      m=(l+r)>>1;
+      if(a[m]>tar)
+      {
+        r=m-1;
+      }
+      else
+      {
+        l=m+1;
+      }
+   }
+   return r;
+}
+int binary_search_3(int l,int r,int tar)//return the first element greater  than 5
+{
+  int m;
+  while(l<=r)
+  {
+    m=(l+r)>>1;
+    if(a[m]<=tar)
+    {
+      l=m+1;
+    }
+    else
+    {
+      r=m-1;
+    }
+  }
+  return l;
+}
+int binary_search_4(int l,int r,int tar)//return the first element greater or equal than 5
+{
+  int m;
+  while(l<=r)
+  {
+    m=(l+r)>>1;
+    if(a[m]<tar)
+    {
+      l=m+1;
+    }
+    else
+    {
+      r=m-1;
+    }
+  }
+  return l;
 }
 int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
+  int n=a.size();
+  cout<<"the last element less than 5 is"<<binary_search_1(0,n,5)<<' '<<a[binary_search_1(0,n,5)]<<'\n';
+  cout<<"the last element less or equal than 5 is"<<binary_search_2(0,n,5)<<' '<<a[binary_search_2(0,n,5)]<<'\n';
+  cout<<"the first element greater than 5 is"<<binary_search_3(0,n,5)<<' '<<a[binary_search_3(0,n,5)]<<'\n';
+  cout<<"the first element greater or equal than 5 is"<<binary_search_4(0,n,5)<<' '<<a[binary_search_4(0,n,5)]<<'\n';
   return 0;
 }
