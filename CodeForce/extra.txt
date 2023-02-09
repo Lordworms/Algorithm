@@ -15,3 +15,4 @@
     复习分块
 7. educational_132 F:
     NTT
+    https://www.acwing.com/solution/content/125207/
