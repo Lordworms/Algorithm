@@ -18,3 +18,8 @@
     https://www.acwing.com/solution/content/125207/
 8. 843 F:
     二维dp
+9. 845 D:
+    概率和均值
+10. 845 E: tarjan 重做
+
+11. 845 F: 补全

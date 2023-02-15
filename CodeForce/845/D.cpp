@@ -1,8 +1,11 @@
+/*
+    https://zhuanlan.zhihu.com/p/600473200
+    没全懂
+*/
 #include <bits/stdc++.h>
 using namespace std;
-const int MOD = 1000000007;
 using ll=long long;
-//
+const int MOD=1e9+7;
 int norm(int x) {
     if (x < 0) {
         x += MOD;
@@ -80,20 +83,48 @@ struct BZ {
         return os << a.val();
     }
 };
-//
-constexpr int N = 4E6;
- 
-std::vector<BZ> fac(N + 1), invfac(N + 1);
- 
-BZ binom(int n, int m) {
-    if (n < m || m < 0) {
-        return 0;
+void solve()
+{
+  int n;
+  cin>>n;
+  vector<vector<int>>edges(n+1);
+  vector<int>height(n+1);
+  for(int i=0;i<n-1;++i)
+  {
+    int x,y;
+    cin>>x>>y;
+    edges[x].push_back(y);
+    edges[y].push_back(x);
+  }
+  function<void(int,int)>dfs=[&](int x,int fa)
+  {
+    height[x]=1;
+    for(int v:edges[x])
+    {
+        if(v==fa)continue;
+        dfs(v,x);
+        height[x]=max(height[v]+1,height[x]);
     }
-    return fac[n] * invfac[m] * invfac[n - m];
+  };
+  dfs(1,-1);
+  BZ ans=0;
+  for(int i=1;i<height.size();++i)ans+=height[i];
+  cout<<ans*power(BZ(2),n-1)<<'\n';
+  return;
 }
 int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
+  #ifdef LOCAL
+  freopen("/Users/xiangyanxin/code/Algorithom/in.txt","r",stdin);
+  freopen("/Users/xiangyanxin/code/Algorithom/out.txt","w",stdout);
+  #endif
+  int T;
+  cin>>T;
+  while(T--)
+  {
+    solve();
+  }
   return 0;
 }
