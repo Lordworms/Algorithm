@@ -1,64 +1,86 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAXN=50;
-struct Edge{
-    int u,v,next;
+using ll=long long;
+struct edge
+{
+	int u,v,w,nxt;
 };
-Edge E[MAXN];
-vector<vector<int>>edges={{1,2},{2,3},{1,3},{1,4},{1,5},{4,5},{6,7},{7,8},{6,8}};
-int head[MAXN];
-int dfn[MAXN],low[MAXN],is_scced[MAXN];
-int cnt,times;
-stack<int>S;
-int ssc_count=0;
-vector<vector<int>>ssc(MAXN);
-void add_edge(int u,int v)
+vector<int>head;
+int edge_cnt,node_cnt;
+void add_edge(int u,int v,int w,vector<edge>& E)
 {
-    E[cnt].u=u;
-    E[cnt].v=v;
-    E[cnt].next=head[u];
-    head[u]=cnt++;
-}   
-void tarjan(int now,int fa)
-{
-    dfn[now]=low[now]=++times;
-    S.push(now);
-    for(int i=head[now];i!=-1;i=E[i].next)
-    {
-        int next=E[i].v;
-        if(!dfn[next])//未被访问过
-        {   
-            tarjan(next,now);
-            low[now]=min(low[now],low[next]);
-        }
-        else if(!is_scced[next])//未属于任何一个强连通分量
-        {
-            low[now]=min(dfn[next],low[now]);
-        }
-    }
-    if(dfn[now]==low[now])
-    {
-      while(true)
-      {
-          int x=S.top();
-          S.pop();
-          ssc[ssc_count].push_back(x);
-          is_scced[x]=ssc_count;
-          if(x==now)break;
-      }
-      ++ssc_count;
-    }
+	E.push_back({u,v,w,head[u]});
+	head[u]=edge_cnt++;
 }
-int main(){
-   ios::sync_with_stdio(false);
-   cin.tie(nullptr);
-   memset(head,-1,sizeof(head));
-   for(auto&edge:edges)
-   {
-       add_edge(edge[0],edge[1]);
-       add_edge(edge[1],edge[0]);
-   }
-   tarjan(1,-1);
-   tarjan(6,-1);
-   return 0;
+vector<edge>E,E1;
+vector<ll>value;
+struct tarjan
+{
+	vector<ll>p;
+    stack<int>S;
+	int n;
+    vector<int>dfn,low,scc;//邻接表的表头,dfs的访问顺序，栈中的最小dfs序,scc[i]属于哪个点
+    vector<vector<int>>scc_vec;//每个缩完的点所包含的点
+    int order;//order 表示dfn序
+    tarjan(int n)
+    {
+        this->n=n;
+		head.resize(n+1,-1);
+        dfn.resize(n+1);
+        low.resize(n+1);
+        scc.resize(n+1);
+		p.resize(n+1);
+        scc_vec.resize(n+1);
+        node_cnt=edge_cnt=order=0;
+        while(S.size())S.pop();
+    }
+
+    void dfs(int now)
+    {
+        dfn[now]=low[now]=++order;
+        S.push(now);
+        for(int i=head[now];i!=-1;i=E[i].nxt)
+        {
+            int v=E[i].v;
+            if(!dfn[v])
+            {
+                dfs(v);
+                low[now]=min(low[now],low[v]);
+            }
+            else if(!scc[v])
+            {
+                low[now]=min(dfn[v],low[now]);
+            }
+        }
+        if(dfn[now]==low[now])
+        {
+            ++node_cnt;
+			while(1)
+            {
+                auto t=S.top();
+                S.pop();
+                scc_vec[node_cnt].push_back(t);
+                scc[t]=node_cnt;
+				value[node_cnt]+=p[t];
+                if(t==now)break;
+            }
+        }
+    }
+	void tar()
+	{
+		value.resize(n+1);
+		for(int i=1;i<=n;++i)
+		{
+			if(!dfn[i])
+			{
+				dfs(i);
+			}
+		}
+	}
+};
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  return 0;
 }
