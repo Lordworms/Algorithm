@@ -5,7 +5,7 @@ struct LB
 {
    vector<ll>p;
    int base;
-   LB(int base)
+   LB(int base=64)
    {
         p.resize(base);
         this->base=base;
@@ -33,12 +33,15 @@ struct LB
         }
         return ans;
    }
-   friend inline LB operator + (const LB& a,const LB& b)
+   void merge(const LB& aa)
    {
-        LB c(a.base);
-        for(int i=0;i<b.base;++i)c.p[i]=a.p[i];
-        for(int i=0;i<b.base;++i)c.insert(b.p[i]);
-        return c;
+        for(int i=base-1;i>=0;--i)
+        {
+            if(aa.p[i])
+            {
+                insert(aa.p[i]);
+            }
+        }
    }
 };
 int main()
