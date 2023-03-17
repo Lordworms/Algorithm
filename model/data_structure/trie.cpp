@@ -4,7 +4,6 @@ const int N=1e5+10;
 int cnt;
 int trie[N][2];
 int f[N][2];
- 
 int newNode() {
     ++cnt;
     trie[cnt][0] = trie[cnt][1] = 0;
