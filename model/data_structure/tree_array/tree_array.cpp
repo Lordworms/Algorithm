@@ -39,7 +39,7 @@ public:
     {
         vector<int>b(nums);
         sort(b.begin(),b.end());
-        b.erase(unique(b.begin(),b.end()),b.end());
+        b.erase(unique(b.begin(),b.end()),b.end());//unique rearrange the data and return the end position, then erase just delete them between b.end()
         for(int i=0;i<nums.size();++i)
             nums[i]=lower_bound(b.begin(),b.end(),nums[i])-b.begin()+1;
         return nums;
