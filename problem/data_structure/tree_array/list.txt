@@ -1,0 +1,56 @@
+以下是 Codeforces 中使用树状数组的 20 道题目，按照难度递增的顺序排列：
+
+A. Little Elephant and Interval (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/204/A
+
+该题目要求计算区间中某个数出现的次数，可以使用树状数组实现。
+
+A. Little Elephant and Bits (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/258/A
+
+该题目要求将一个二进制数的最后一个 0 变成 1，可以使用树状数组实现。
+
+B. Kuriyama Mirai's Stones (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/433/B
+
+该题目要求计算区间和，可以使用树状数组实现。
+
+B. Kefa and Company (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/580/B
+
+该题目要求在一个有权值的人员列表中，选出 k 个人，使得他们的友谊价值之和最大，可以使用树状数组实现。
+
+B. Dreamoon and WiFi (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/476/B
+
+该题目要求计算两个字符串匹配的概率，可以使用树状数组实现。
+
+C. Drazil and his Happy Friends (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/515/C
+
+该题目要求检查一些数是否是给定数的和的倍数，可以使用树状数组实现。
+
+C. Little Girl and Maximum Sum (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/276/C
+
+该题目要求在一个序列中选择一些数，使得它们的和乘以它们在原序列中的位置之和最大，可以使用树状数组实现。
+
+D. Xenia and Bit Operations (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/339/D
+
+该题目要求进行一些异或和求和的操作，可以使用树状数组实现。
+
+D. Distance in Tree (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/161/D
+
+该题目要求计算树上两个节点之间的距离，可以使用树状数组实现。
+
+D. Balanced Playlist (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/1237/D
+
+该题目要求在一个音乐播放列表中选择一些歌曲，使得它们的节奏值之差最小，可以使用树状数组实现。
+
+E. Counting Arrays (Div. 2)
+题目链接：https://codeforces.com/problemset/problem/893/E
+
+该题目要求计算长度为 n，最大值为 m，且每个数的因子数为 k 的序列个数，可以使用树状数组实现。
