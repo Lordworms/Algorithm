@@ -1,34 +1,32 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll=long long;
-const int MOD=1e9+7;
-const int N=24;
-#define lowbit(x) (x&-x)
+const int MOD=998244353;
 void solve(){
-  int n;
-  cin>>n;
-  vector<int>a(n);
-  vector<ll>sum(1<<n);
-  for(int i=0;i<n;++i){
-    cin>>a[i];
-    sum[1<<i]=a[i];
+  int n,m;
+  cin>>n>>m;
+  vector dp(n+1,vector<int>(1<<10));
+  vector<int> a(1<<10),b(a);//a[i] means (i,*) b[i] means (*,i)
+  for(int i=1;i<=m;++i){
+    int u,v;
+    cin>>u>>v;
+    a[u]|=(1<<v);
+    b[v]|=(1<<u);
   }
-  int k;cin>>k;
-  vector<int>no(2);
-  for(int i=0;i<k;++i)cin>>no[i];
-  vector<ll>dp(1<<n);
-  for(int i=0;i<n;++i){
-    dp[1<<i]=(a[i]!=no[0]&&a[i]!=no[1]?1:0);
-  }
-  for(int i=1;i<(1<<n);++i){
-    sum[i]=sum[i^lowbit(i)]+sum[lowbit(i)];
-    if(sum[i]==no[0]||sum[i]==no[1])continue;
-    for(int j=i;j;j-=lowbit(j)){
-        dp[i]+=dp[i^lowbit(j)];
-        dp[i]%=MOD;
+  dp[0][0]=1;
+  for(int i=1;i<=n;++i){
+    for(int sta=0;sta<(1<<10);++sta){
+      for(int j=0;j<10;++j){
+        if(sta&(1<<j))continue;//we could not pick some digit which could be placed earlier
+        (dp[i][(sta&a[j])|b[j]]+=dp[i-1][sta])%=MOD;
+      }
     }
   }
-  cout<<dp[(1<<n)-1]<<'\n';
+  int ans=0;
+  for(int sta=0;sta<(1<<10);++sta){
+    ans=(ans+dp[n][sta])%MOD;
+  }
+  cout<<ans<<'\n';
   return;
 }
 int main(){
