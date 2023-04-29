@@ -43,5 +43,8 @@ int main()
 {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
+  Solution sol;
+  vector<int>a={3,1,4,2,5,2,6,1};
+  sol.minOperations(a,a);
   return 0;
 }
