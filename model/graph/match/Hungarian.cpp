@@ -4,7 +4,7 @@ const int MAXN=300;
 vector<int>boys,girls;
 bool vis[MAXN][MAXN];
 vector<bool>used;
-//匈牙利算法求二分图最大匹配//满足图为二分图,时间复杂度O（n^3）
+//匈牙利算法求二分图最大匹配//满足图为二分图,时间复杂度O（vE）
 int n,m;//男性和女性的数量
 bool find(int x)
 {
