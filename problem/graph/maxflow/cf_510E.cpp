@@ -1,17 +1,8 @@
-/*
-  time complexity: O(mn^2)
-  there are two optimization for Dinic
-  1. multi extend: if we there are more flow that did not used out during on extend, then we could find another road at the same time
-  2. now lroad optimization: if we have extend a line, then it is impossible to extend it again
-  how to do that?
-  we give a depth of every point before every extend
-  dep[i] means the distance between i and the start point
-  we only extend the dep[i]+1 durng every extend
-*/
 #include <bits/stdc++.h>
 using namespace std;
 using ll=long long;
 const int MOD=1e9+7;
+const int INF=0x3f3f3f3f;
 struct Dinic
 {
   struct Edge
@@ -95,23 +86,87 @@ struct Dinic
     return ans;
   }
 };
-int main()
-{
+void solve(){
+  int n;
+  cin>>n;
+  vector<int>f(n+1);
+  for(int i=1;i<=n;++i)cin>>f[i];
+  auto check_prime=[&](int num){
+    for(int i=2;i<=sqrt(num);++i){
+        if(num%i==0){
+            return 0;
+        }
+    }
+    return 1;
+  };
+  Dinic dinic(n+3,0);
+  int S=0,T=n+1;
+  auto check=[&](){
+    vector<int>odd,even;
+    for(int i=1;i<=n;++i){
+        if(f[i]&1){
+            odd.push_back(i);
+            dinic.add_edge(S,i,2);
+        }else{
+            even.push_back(i);
+            dinic.add_edge(i,T,2);
+        }
+    }
+    for(int i=0;i<odd.size();++i){
+        for(int j=0;j<even.size();++j){
+            if(check_prime(f[odd[i]]+f[even[j]])){
+                dinic.add_edge(odd[i],even[j],1);//odd->even
+            }
+        }
+    }
+    auto maxflow=dinic.maxflow(S,T);
+    return maxflow==n;
+  };
+   //first checkout whether it is possible to arrange all foxes
+  if(!check()){
+    cout<<"Impossible\n";
+    return;
+  }
+  vector<vector<int>>groups;
+  //then we use dfs to arrange all foxes
+  vector<int>vis(n+1);
+  function<void(int)>dfs=[&](int cur){
+    groups.back().push_back(cur);
+    vis[cur]=1;
+    for(int id:dinic.G[cur]){
+        auto e=dinic.E[id];
+        if(e.to==S||e.to==T||vis[e.to])continue;
+        if((e.cap==0&&f[e.from]%2==1)||(dinic.E[id^1].cap==0&&f[e.to]%2==1)){
+            dfs(e.to);
+        }
+    }
+  };
+  for(int i=1;i<=n;++i){
+    if(!vis[i]){
+        groups.push_back(vector<int>());
+        dfs(i);
+    }
+  }
+  cout<<groups.size()<<'\n';
+  for(int i=0;i<groups.size();++i){
+    cout<<groups[i].size()<<' ';
+    for(int num:groups[i]){
+        cout<<num<<' ';
+    }
+    cout<<'\n';
+  }
+  return;
+}
+int main(){
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
   #ifdef LOCAL
   freopen("/Users/xiangyanxin/code/Algorithom/in.txt","r",stdin);
   freopen("/Users/xiangyanxin/code/Algorithom/out.txt","w",stdout);
   #endif
-  int n,m,s,t;
-  cin>>n>>m>>s>>t;
-  Dinic dinic(n,m);
-  for(int i=0;i<m;++i)
-  {
-    int from,to,cap;
-    cin>>from>>to>>cap;
-    dinic.add_edge(from,to,cap);
+  int T=1;
+  while(T--){
+    solve();
   }
-  cout<<dinic.maxflow(s,t)<<'\n';
   return 0;
 }
