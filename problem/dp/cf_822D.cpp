@@ -2,21 +2,25 @@
 using namespace std;
 using ll=long long;
 const int MOD=1e9+7;
+const int MAXM=5e6+10;
 const ll INF=1e18;
 void solve(){
-  ll n,x,y;
-  cin>>n>>x>>y;
-  vector<ll>dp(n+1,INF);
-  dp[1]=x;
-  for(int i=2;i<=n;++i){
-    if(i%2==0){
-      dp[i]=min(dp[i],dp[i/2]+y);
-    }else{
-      dp[i]=min(dp[(i+1)>>1]+x+y,dp[i]);
+  ll t,l,r;
+  cin>>t>>l>>r;
+  vector dp(MAXM,INF);
+  dp[1]=0;
+  for(int i=1;i<=r;++i){
+    for(int j=2;j*i<=r;++j){
+        dp[i*j]=min(dp[i*j],dp[i]+1ll*j*i*(j-1)/2);
     }
-    dp[i]=min(dp[i-1]+x,dp[i]);
   }
-  cout<<dp[n]<<'\n';
+  ll ans=0;
+  ll base=1;
+  for(int i=l;i<=r;++i){
+    ans=(ans+base*(dp[i]%MOD))%MOD;
+    base=base*t%MOD;
+  }
+  cout<<ans<<'\n';
   return;
 }
 int main(){
