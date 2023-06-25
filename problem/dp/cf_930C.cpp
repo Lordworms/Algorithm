@@ -1,3 +1,7 @@
+/*
+找从1-i和m-i的最长不降序列的最大值
+
+*/
 #include <bits/stdc++.h>
 using namespace std;
 int main(){
