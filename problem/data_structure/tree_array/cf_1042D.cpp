@@ -38,6 +38,7 @@ void solve() {
   ll pre = 0;
   ll ans = 0;
   //sum[r] - sum[l - 1] < t <=> sum[r] - t < sum[l - 1];
+  //多体会一下！！！！
   for (int i = 1; i <= n; ++i) {
     int l = upper_bound(sum.begin(), sum.end(), pre) - sum.begin();
     tr.add(l, 1);
