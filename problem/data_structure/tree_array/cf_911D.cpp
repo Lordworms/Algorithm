@@ -26,31 +26,25 @@ struct fenwick {
 void solve() {
   int n;
   cin >> n;
-  vector<int> p(n + 1);
+  vector<int> a(n + 1);
+  ll total = 0;
   fenwick tr;
   for (int i = 1; i <= n; ++i) {
-    cin >> p[i];
+    cin >> a[i];
+    total += i - 1 - tr.get(a[i]);
+    tr.add(a[i], 1);
   }
-  ll ans = -1, ans_i = 1;
-  int cur_max = -1;
-  vector<int> cnt(n + 1);
-  for (int i = 1; i <= n; ++i) {
-    cur_max = max(cur_max, p[i]);
-    int cur_num = tr.get(p[i]);
-    if (cur_num == i - 2) {
-      cnt[cur_max]++;
-    } else if (cur_num == i - 1){
-      cnt[cur_max]--;
+  bool sign = total % 2 == 1;
+  int q, l, r;
+  cin >> q;
+  while (q--) {
+    cin >> l >> r;
+    total = (r - l + 1) * (r - l) >> 1;
+    if (total % 2) {
+      sign = !sign;
     }
-    tr.add(p[i], 1);
+    cout << (sign ? "odd" : "even") << '\n'; 
   }
-  for (int i = 1; i <= n; ++i) {
-    if (cnt[i] > ans) {
-      ans = cnt[i];
-      ans_i = i;
-    }
-  }
-  cout << ans_i << '\n';
   return;
 }
 int main() {

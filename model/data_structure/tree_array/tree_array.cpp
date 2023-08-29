@@ -7,6 +7,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int MAXN = 1e5 + 5;
+using ll = long long;
 struct fenwick {
   ll PartialSum[MAXN];
   fenwick() {
