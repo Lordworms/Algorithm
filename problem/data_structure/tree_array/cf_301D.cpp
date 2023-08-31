@@ -43,20 +43,20 @@ void solve() {
       }
       group[x].push_back(y);
     }
-  }
+  }// group[i] stores the actual factor which is less than i
   int l, r;
   vector<vector<pii>> query(n + 1);
   for (int i = 1; i <= m; ++i) {
     cin >> l >> r;
-    query[r].push_back({l, i});
+    query[r].push_back({l, i}); // query[i] stores the actual query left ptr and the is of the query
   }
   vector<int> ans(m + 1);
   for (int i = 1; i <= n; ++i) {
     for (int v : group[i]) {
-      tr.add(v, 1);
+      tr.add(v, 1); // the shit we are adding could be counted as the paris between [1, i]
     }
     for (auto& [l, now] : query[i]) {
-      ans[now] = tr.get(i) - tr.get(l - 1);
+      ans[now] = tr.get(i) - tr.get(l - 1); // now we are calculating the pair between [l, i] which is like this
     }
   }
   for (int i = 1; i <= m; ++i) {
