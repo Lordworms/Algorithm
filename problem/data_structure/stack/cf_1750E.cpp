@@ -12,7 +12,7 @@ void solve() {
   vector<ll> sum(n + 1);
   for (int i = 1; i <= n; ++i) {
     sum[i] = sum[i - 1] + (s[i] == '(' ? 1 : -1);
-  } 
+  }
   sort(sum.begin(), sum.end());
   ll total = 0;
   for (int i = 1; i <= n; ++i) {
@@ -21,7 +21,7 @@ void solve() {
   for (int i = 1; i <= n; ++i) {
     total += i * sum[i];
   }
-  for (int i = 0 ; i <= n - 1; ++i) {
+  for (int i = 0; i <= n - 1; ++i) {
     total -= (n - i) * sum[i];
   }
   total >>= 1;
@@ -35,7 +35,7 @@ void solve() {
     }
   }
   cout << total << '\n';
-  return ;
+  return;
 }
 signed main() {
   ios::sync_with_stdio(false);
