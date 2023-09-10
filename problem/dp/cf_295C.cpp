@@ -2,67 +2,79 @@
 using namespace std;
 using ll = long long;
 const int MOD = 1e9 + 7;
-const int MAXN = 105;
-const int MAXP = 15;
-ll dp[MAXN][MAXN][MAXP];
+const int N = 55;
+#define total(x, y) ((x * 50 + y * 100))
+ll A[N][N][N][N];
+ll C[N][N];
+ll dp[N << 2][N][N];
 void solve() {
-  int n, m, p;
-  memset(dp, -1, sizeof(dp));
-  cin >> n >> m >> p;
-  ++p;
-  vector<vector<int>> mp(n, vector<int>(m));
-  char c;
-  for (int i = 0; i < n; ++i) {
-    for (int j = 0; j < m; ++j) {
-      cin >> c;
-      mp[i][j] = c - '0';
+  ll n, lim;
+  cin >> n >> lim;
+  vector<int> a(n + 1);
+  int cnta = 0, cntb = 0;
+  for (int i = 1; i <= n; ++i) {
+    cin >> a[i];
+    if (a[i] == 50) {
+      cnta++;
+    } else {
+      cntb++;
     }
   }
-  for (int j = 0; j < m; ++j) {
-    dp[n - 1][j][mp[n - 1][j] % p] = mp[n - 1][j];
+  for (int i = 0; i < N; ++i) {
+    for (int j = C[i][0] = 1; j <= i; ++j) {
+      C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % MOD;
+    }
   }
-  for (int i = n - 2; i >= 0; --i) {
-    for (int j = 0; j < m; ++j) {
-      for (int k = 0; k < p; ++k) {
-        int y = (k - mp[i][j] % p + p) % p;
-        if (j > 0 && dp[i + 1][j - 1][y] != -1) {
-          dp[i][j][k] = max(dp[i][j][k], dp[i + 1][j - 1][y] + mp[i][j]);
-        }
-        if (j < m - 1 && dp[i + 1][j + 1][y] != -1) {
-          dp[i][j][k] = max(dp[i][j][k], dp[i + 1][j + 1][y] + mp[i][j]);
+  for (int a = 0; a < N; ++a) {
+    for (int b = 0; b < N; ++b) {
+      for (int c = 0; c <= a; ++c) {
+        for (int d = 0; d <= b; ++d) {
+          A[a][b][c][d] = (C[a][c] * C[b][d]) % MOD;
         }
       }
     }
   }
-  int pos = 0;
-  for (int i = 1; i < m; ++i) {
-    if (dp[0][i][0] > dp[0][pos][0]) {
-      pos = i;
+  dp[0][cnta][cntb] = 1;
+  for (int i = 1; i <= 4 * n + 1; i += 2) {
+    ll res = 0;
+    // positive direction
+    for (int x = 0; x <= cnta; ++x) {
+      for (int y = 0; y <= cntb; ++y) {
+        if (dp[i - 1][x][y]) {
+          for (int a = 0; a <= x; ++a) {
+            for (int b = 0; b <= y; ++b) {
+              if ((a | b) && (total(a, b) <= lim)) {
+                dp[i][x - a][y - b] +=
+                    (A[x][y][a][b] * dp[i - 1][x][y]);
+                dp[i][x - a][y - b] %= MOD;
+              }
+            }
+          }
+        }
+      }
+    }
+    if (dp[i][0][0]) {
+      cout << i << '\n' << dp[i][0][0] << '\n';
+      return;
+    }
+    // negative direction
+    for (int x = 0; x <= cnta; ++x) {
+      for (int y = 0; y <= cntb; ++y) {
+        if (dp[i][x][y]) {
+          for (int a = 0; a <= cnta - x; ++a) {
+            for (int b = 0; b <= cntb - y; ++b) {
+              if ((a | b) && (total(a, b) <= lim)) {
+                dp[i + 1][x + a][y + b] +=
+                    (A[cnta - x][cntb - y][a][b] * dp[i][x][y]);
+                dp[i + 1][x + a][y + b] %= MOD;
+              }
+            }
+          }
+        }
+      }
     }
   }
-  if (dp[0][pos][0] == -1) {
-    cout << -1 << '\n';
-    return;
-  }
-  cout << dp[0][pos][0] << '\n';
-  stack<char> st;
-  int x = 0, y = 0, j = pos;
-  for (int i = 0; i < n - 1; ++i) {
-    y = (x - mp[i][j] % p + p) % p;
-    if (j == 0 || dp[i][j][x] == dp[i + 1][j + 1][y] + mp[i][j]) {
-      st.push('L');
-      ++j;
-    } else {
-      st.push('R');
-      --j;
-    }
-    x = y;
-  }
-  cout << j + 1 << '\n';
-  while (!st.empty()) {
-    cout << st.top();
-    st.pop();
-  }
+  cout << -1 << '\n' <<0 <<'\n';
   return;
 }
 int main() {
