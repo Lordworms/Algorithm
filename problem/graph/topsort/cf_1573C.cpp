@@ -7,7 +7,7 @@ void solve() {
   cin >> n;
   vector<vector<int>> E(n + 1);
   vector<int> deg(n + 1);
-  for (int i = 1 ; i <= n; ++i) {
+  for (int i = 1; i <= n; ++i) {
     int k;
     cin >> k;
     deg[i] = k;
@@ -16,7 +16,7 @@ void solve() {
       cin >> x;
       E[x].push_back(i);
     }
-  } 
+  }
   deque<int> q;
   vector<int> dp(n + 1);
   for (int i = 1; i <= n; ++i) {
@@ -30,13 +30,11 @@ void solve() {
     q.pop_front();
     for (int &v : E[cur]) {
       --deg[v];
-      if (!deg[v]) {
-        q.push_back(v);
-        if (cur > v) { // could read in one simulation
-          dp[v] = max(dp[cur] + 1, dp[v]);
-        } else {
-          dp[v] = max(dp[v], dp[cur]);
-        }
+      if (!deg[v]) q.push_back(v);
+      if (cur > v) {  // could read in one simulation
+        dp[v] = max(dp[cur] + 1, dp[v]);
+      } else {
+        dp[v] = max(dp[v], dp[cur]);
       }
     }
   }
@@ -54,7 +52,7 @@ void solve() {
   } else {
     cout << -1 << '\n';
   }
-  return ;
+  return;
 }
 int main() {
   ios::sync_with_stdio(false);
