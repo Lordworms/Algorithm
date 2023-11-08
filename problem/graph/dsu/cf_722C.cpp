@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
+#define int ll
 const int MOD = 1e9 + 7;
 const int MAXN = 1e5 + 10;
 int fa[MAXN], a[MAXN];
@@ -42,17 +43,18 @@ void solve() {
     }  
     res[i] = ans;
   }
-  for (int i = 1; i <= n; ++i) {
-    cout << res[i] << '\n'
+  for (int i = 2; i <= n; ++i) {
+    cout << res[i] << '\n';
   }
+  cout << 0 << '\n';
   return ;
 }
-int main() {
+signed main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
 //#ifdef DEBUG
-  freopen("D:/code/Algorithm/in", "r", stdin);
-  freopen("D:/code/Algorithm/out", "w", stdout);
+  // freopen("D:/code/Algorithm/in", "r", stdin);
+  // freopen("D:/code/Algorithm/out", "w", stdout);
 //#endif
   int T = 1;
   while (T--) {
