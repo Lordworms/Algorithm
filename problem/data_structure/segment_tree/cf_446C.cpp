@@ -9,13 +9,19 @@ const int MOD = 1e9 + 7;
 const int MAXN = 3e5 + 10;
 struct node {
   int l, r;
-  ll sum,add1, add2;
+  ll sum,f1, f2;
 };
 node tree[MAXN << 2];
 ll f[MAXN];
 int a[MAXN];
 void push_up(int c) {
   tree[c].sum = (tree[c << 1].sum + tree[c << 1 | 1].sum) % MOD;
+}
+void push_down(int c) {
+  if (!(tree[c].f1 || tree[c].f2)) {
+    int m = (l + r) >> 1;
+    (tree[c << 1].f1 += ) %= MOD;
+  }  
 }
 void build(int c, int l, int r) {
   tree[c] = {l, r, 0, 0, 0};
@@ -24,7 +30,13 @@ void build(int c, int l, int r) {
     return;
   }
 }
-void modify() {
+void modify(int c, int ql, int qr, int l, int r) {
+  if (ql > r || qr < l) return;
+  if (ql <= l && qr >= r) {
+    tree[c].f1 += 
+    tree[c].f2 += 
+    return;
+  }
 
 }
 void solve() {
