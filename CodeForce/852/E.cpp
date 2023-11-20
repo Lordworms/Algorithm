@@ -3,7 +3,15 @@ using namespace std;
 using ll = long long;
 const int MOD = 1e9+7;
 void solve() {
-  
+  int n, q, k;
+  cin >> n;
+  vector<int> a(n + 1);
+  for (int i = 1; i <= n; ++i) cin >> a[i];
+  cin >> q;
+  while (q--) {
+    cin >> k;
+    
+  }
   return;
 }
 int main() {
