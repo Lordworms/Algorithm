@@ -116,11 +116,7 @@ void solve() {
       id = getid(name);
       // same logic
       pri = query(1, lim, id, id, rt2[i]);
-      if (pri) {
-        rt1[i] = update(1, lim, id, -1, rt1[i]);
-      } else {
-        rt1[i] = 1;
-      }
+      pri? rt1[i] = update(1, lim, id, -1, rt1[i]) : 1;
       rt2[i] = update(1, lim, id, -pri, rt2[i]);
     }
     if (op == "undo") {
@@ -138,10 +134,10 @@ void solve() {
   return;
 }
 int main() {
-  // ios::sync_with_stdio(false);
-  // cin.tie(nullptr);
-  // freopen("D:/code/Algorithm/in", "r", stdin);
-  // freopen("D:/code/Algorithm/out", "w", stdout);
+#ifdef LOCAL
+  freopen("/Users/xiangyanxin/code/Algorithom/in.txt", "r", stdin);
+  freopen("/Users/xiangyanxin/code/Algorithom/out.txt", "w", stdout);
+#endif
   int T = 1;
   while (T--) {
     solve();
