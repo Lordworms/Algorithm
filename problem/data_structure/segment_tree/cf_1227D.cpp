@@ -18,6 +18,7 @@ int cnt;
 int a[MAXN];
 int len;
 map<int, int> ids;
+map<int, int> ans;
 int getid(int x) {
   return ids[x];
 }
@@ -50,11 +51,12 @@ int update(int l, int r, int pos, int v, int pre) {
 }
 ll query(int u, int v, int l, int r, int k) {
   int left = sum[tr[v].l] - sum[tr[u].l], m = (l + r) >> 1;  
+  int right = sum[tr[v].r] - sum[tr[u].r];
   if (l == r) return l;
   if (left >= k) {
-    return query(u, v, l, m, k);
+    return query(tr[u].l, tr[v].l, l, m, k);
   } else {
-    return query(u, v, m + 1, r, k - left);
+    return query(tr[u].r, tr[v].r, m + 1, r, k - left);
   } 
 }
 void solve() {
@@ -76,7 +78,8 @@ void solve() {
   }
   len = unique(a + 1, a + 1 + n) - a - 1;
   for (int i = 1; i <= len; ++i) {
-    ids[a[i]] = i;
+    ids[a[i]] = len - i + 1;
+    ans[len - i + 1] = a[i];
   }
   rt[0] = build(1, len);
   for (int i = 1; i <= n; ++i) {
@@ -86,7 +89,8 @@ void solve() {
   cin >> q;
   while (q--) {
     cin >> k >> pos;
-    cout << a[query(0, k, 1, len, len - pos)] << '\n';
+    pos = query(rt[0], rt[k], 1, len, pos);
+    cout << ans[pos] << '\n';
   }
   return ;
 }
