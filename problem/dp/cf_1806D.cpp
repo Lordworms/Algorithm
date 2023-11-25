@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
-const int MOD = 1e9 + 7;
+const int MOD = 998244353;
+#define int ll
 void solve() {
   int n;
   cin >> n;
@@ -18,7 +19,7 @@ void solve() {
   }
   return;
 }
-int main() {
+signed main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
 #ifdef LOCAL
