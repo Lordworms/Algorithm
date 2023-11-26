@@ -2,8 +2,18 @@
 using namespace std;
 using ll = long long;
 const int MOD = 1e9+7;
+const int N = 3e5 + 10;
+int a[N];
+struct node {
+  int l, r, minx, maxx;
+};
+node tr1[N << 4], tr2[N << 4];
+
 void solve() {
-  
+  int n, q;
+  cin >> n >> q;
+  for (int i = 1; i <= n; ++i) cin >> a[i];
+
   return;
 }
 int main() {
