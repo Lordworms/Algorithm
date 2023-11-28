@@ -36,7 +36,7 @@ void solve() {
   ll ans = -INF;
   for (int j = 1; j <= m; ++j) {
     ans = max(ans, dp[n][j]);
-  }
+  
   cout << ans << '\n';
   return;
 }
