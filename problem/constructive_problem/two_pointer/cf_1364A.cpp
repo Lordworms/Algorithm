@@ -8,15 +8,18 @@ void solve() {
   vector<int> a(n + 1);
   for (int i = 1; i <= n; ++i) {
     cin >> a[i];
-    a[i] %= 3;
+    a[i] %= x;
     sum += a[i];
   }
-  if (sum % 3 == 0) {
-            
-  }
-  int l = 1, r = 1;
-  while (r <= n) {
-    while (r <= n && )
+  if (sum == 0) {
+    cout << -1 << '\n';
+  } else if (sum % x != 0) {
+    cout << n << '\n';
+  } else {
+    int l = 1, r = n;
+    while (!a[l]) ++l;
+    while (!a[r]) --r;
+    cout << std::max(n - l, r - 1) << '\n';
   }
   return;
 }
