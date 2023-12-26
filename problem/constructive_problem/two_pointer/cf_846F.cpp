@@ -2,6 +2,7 @@
 using namespace std;
 using ll = long long;
 const int MOD = 1e9+7;
+// using double is slow
 void solve() {
   int n;
   cin >> n;
