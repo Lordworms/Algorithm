@@ -2,7 +2,7 @@
 using namespace std;
 using ll = long long;
 const int MOD = 1e9+7;
-const int MAXN = 2e5 + 10;
+const int MAXN = 4e5 + 10;
 #define id(x) (lower_bound(nums.begin(), nums.end(), x) - nums.begin() + 1)
 #define lowbit(x) (x & -x)
 struct Line {
