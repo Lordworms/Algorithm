@@ -9,7 +9,7 @@ void solve() {
   vector<int> a(n + 1);
   for (int i = 1; i <= n; ++i) {
     cin >> a[i];
-  } 
+  }
   sort(a.begin() + 1, a.end());
   vector dp(n + 1, vector<int>(n + 1));
   for (int len = 2; len <= n; ++len) {
@@ -18,7 +18,7 @@ void solve() {
     }
   }
   cout << dp[1][n] << '\n';
-  return ;
+  return;
 }
 signed main() {
   ios::sync_with_stdio(false);
