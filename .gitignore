@@ -5,6 +5,8 @@ test.cpp
 test1.cpp
 in.txt
 out.txt
+lc_practice/[0-9]*.*
+!lc_practice/[0-9]*.cpp
 [c][f]*
 ![c][f]*[.][c][p][p]
 !*.sh
