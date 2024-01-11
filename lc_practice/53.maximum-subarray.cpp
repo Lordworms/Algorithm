@@ -10,13 +10,10 @@ using namespace std;
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-      int n = nums.size();
-      int cur_sum = 0;
-      int ans = nums[0];
+      int n = nums.size(), cur_sum = 0, ans = INT_MIN;
       for (int i = 0; i < n; ++i) {
-        // two options: get the new one and abandon the previous element or starting the new one
         cur_sum = max(cur_sum + nums[i], nums[i]);
-        ans = max(ans, cur_sum);
+        ans = max(cur_sum, ans);
       }
       return ans;
     }

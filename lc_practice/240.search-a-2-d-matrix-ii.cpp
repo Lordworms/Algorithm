@@ -10,16 +10,16 @@ using namespace std;
 class Solution {
 public:
     bool searchMatrix(vector<vector<int>>& mat, int target) {
-      int m = mat.size(), n = mat[0].size();
-      int x = 0, y = n - 1;
-      while (x < m && y >= 0) {
-        if (mat[x][y] == target) return true;
-        if (mat[x][y] < target) {
-          ++x;
+      int n = mat.size(), m = mat[0].size();
+      int l = 0, r = m - 1;
+      while (l < n && r >= 0) {
+        if (mat[l][r] == target) return true;
+        if (mat[l][r] < target) {
+          ++l;
         } else {
-          --y;
+          --r;
         }
-      }    
+      }
       return false;
     }
 };

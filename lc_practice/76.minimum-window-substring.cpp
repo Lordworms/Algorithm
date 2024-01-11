@@ -10,30 +10,29 @@ using namespace std;
 class Solution {
  public:
   string minWindow(string s, string t) {
-    map<char, int> cur_window, stand;
+    map<char, int> pat, mod;
     for (auto &c : t) {
-      stand[c]++;
-    }
-    function<bool()> check = [&]() {
-      for (auto &k : stand) {
-        if (cur_window[k.first] < k.second) {
-          return false;
-        }
+      pat[c]++;
+    }  
+    auto check = [&]() {
+      for (auto &p : pat) {
+        if (mod[p.first] < p.second) return false;
       }
       return true;
     };
-    int n = s.size();
     int l = 0, len = INT_MAX, st = -1;
-    for (int r = 0; r < n; ++r) {
-      if (stand.find(s[r]) != stand.end()) {
-        cur_window[s[r]]++;
+    for (int r = 0; r < s.size(); ++r) {
+      if (pat.find(s[r]) != pat.end()) {
+        mod[s[r]]++;    
       }
       while (l <= r && check()) {
         if (r - l + 1 < len) {
           len = r - l + 1;
           st = l;
         }
-        if (stand.find(s[l]) != stand.end()) cur_window[s[l]]--;
+        if (pat.find(s[l]) != pat.end()) {
+          mod[s[l]]--;
+        }
         ++l;
       }
     }
@@ -42,6 +41,6 @@ class Solution {
 };
 // int main() {
 //   Solution sol;
-//   sol.minWindow("ADOBECODEBANC", "ABC");
+//   assert(sol.minWindow("ADOBECODEBANC", "ABC") == "BANC");
 // }
 // @lc code=end

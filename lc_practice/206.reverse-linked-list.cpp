@@ -20,16 +20,14 @@ using namespace std;
 class Solution {
 public:
     ListNode* reverseList(ListNode* h) {
-      if (h == nullptr) return nullptr;
-      ListNode *cur = h, *pre = nullptr, *nxt = cur->next;
-      while (cur != nullptr && nxt != nullptr) {
+      ListNode *cur = h, *pre = nullptr, *nxt;
+      while (cur != nullptr) {
+        nxt = cur->next;
         cur->next = pre;
         pre = cur;
         cur = nxt;
-        nxt = nxt->next;
       }
-      cur->next = pre;
-      return cur;
+      return pre;
     }
 };
 // @lc code=end
