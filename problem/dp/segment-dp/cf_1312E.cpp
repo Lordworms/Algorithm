@@ -1,43 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
-const int MOD = 1e9 + 7;
-const int N = 510;
+const int MOD = 1e9+7;
+const int INF = 0x3f3f3f3f;
 void solve() {
   int n;
   cin >> n;
-  vector<vector<int>> dp(N, vector<int>(N)), a(dp);
-  // when a range is length 1, the answer is absolutely 1
+  vector dp(n + 1, vector<int> (n + 1, INF)), a(dp);
+  for (int i = 1; i <= n; ++i) cin >> a[i][i];
   for (int i = 1; i <= n; ++i) {
-    cin >> a[i][i];
     dp[i][i] = 1;
   }
-  // we initialize the value of a range to be j - i + 1
-  for (int i = 1; i <= n; ++i) {
-    for (int j = i + 1; j <= n; ++j) {
-      dp[i][j] = j - i + 1;
-    }
-  }
-  // when left and right length is 1 and the value is 1 we could do the merge
   for (int len = 2; len <= n; ++len) {
-    for (int l = 1, r = len; r <= n; ++l, ++r) {
-      for (int k = l; k < r; ++k) {
+    for (int l = 1, r = l + len - 1; r <= n; ++l, ++r) {
+      for (int k = l; k <= r - 1; ++k) {
         dp[l][r] = min(dp[l][r], dp[l][k] + dp[k + 1][r]);
-        if (dp[l][k] == 1 && dp[k + 1][r] == 1 && a[l][k] == a[k + 1][r]) {
-          dp[l][r] = 1, a[l][r] = a[l][k] + 1; 
+        if (dp[l][k] == 1 && a[l][k] == a[k + 1][r] && dp[k + 1][r] == 1) {
+          a[l][r] = a[l][k] + 1; 
+          dp[l][r] = 1;
         }
       }
     }
   }
   cout << dp[1][n] << '\n';
-  return ;
+  return;
 }
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
-#ifdef DEBUG
-  freopen("/Users/yanxinxiang/code/Algorithm/in", "r", stdin);
-  freopen("/Users/yanxinxiang/code/Algorithm/out", "w", stdout);
+#ifdef LOCAL
+  freopen("/Users/xiangyanxin/code/Algorithom/in.txt", "r", stdin);
+  freopen("/Users/xiangyanxin/code/Algorithom/out.txt", "w", stdout);
 #endif
   int T = 1;
   while (T--) {
