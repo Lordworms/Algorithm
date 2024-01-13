@@ -9,8 +9,8 @@
 using namespace std;
 class MedianFinder {
 private:
-    multiset<int> st;
-    multiset<int>::iterator l, r;
+   multiset<int> st;
+   multiset<int>::iterator l, r;
 public:
     MedianFinder() {
       
@@ -19,9 +19,11 @@ public:
     void addNum(int num) {
       int n = st.size();
       st.insert(num);
-      if (!n) {
+      if (n == 0) {
         l = r = st.begin();
-      } else if (n & 1) {
+        return;
+      } 
+      if (n & 1) {
         if (*l > num) {
           --l;
         } else {
@@ -29,8 +31,7 @@ public:
         }
       } else {
         if (*l < num && *r > num) {
-          ++l;
-          --r;
+          ++l, --r;
         } else if (*r <= num) {
           ++l;
         } else {
