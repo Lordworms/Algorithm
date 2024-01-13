@@ -10,33 +10,28 @@ using namespace std;
 class Solution {
 public:
     string longestPalindrome(string s) {
-      /*
-        make the total length an even number
-      */
-      string mod = "%";
+      string mod = "$";
       for (auto c : s) {
-        mod += '#';  
+        mod += '#';
         mod += c;
       }
       mod += '#';
       int n = mod.size();
       vector<int> P(n + 1);
-      int maxlen = INT_MIN, st = -1, R = 0, mid = 0;
+      int mid = 0, st = -1, len = INT_MIN, R = 0;
       for (int i = 1; i < n; ++i) {
-        // the maxR > i we have to pick up the minimum between the middle and  R - i
-        P[i] = R > i ? (P[2 * mid - i], R - i) : 0;
-        while (i - P[i] - 1 >= 0 && mod[i - P[i] - 1] == mod[i + P[i] + 1]) ++P[i];
+        P[i] = R > i ? min(P[2 * mid - i], R - i) : 0;
+        while (i - P[i] - 1 >= 0 && mod[P[i] + 1 +i] == mod[i - P[i] - 1]) ++P[i];
         if (i + P[i] > R) {
           R = i + P[i];
           mid = i;
         }
-        if (P[i] > maxlen) {
-          maxlen = P[i];
+        if (P[i] > len) {
+          len = P[i];
           st = (i - P[i]) >> 1;
         }
       }
-      if (st == -1) return "";
-      return s.substr(st, maxlen);
+      return st == -1 ? "" : s.substr(st, len);
     }
 };
 // @lc code=end

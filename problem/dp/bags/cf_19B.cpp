@@ -1,41 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
-using ll=long long;
-const int MOD=1e9+7;
-void solve(){
+using ll = long long;
+const int MOD = 1e9+7;
+struct Item {
+  int c, t;
+};
+const int INF = 0x3f3f3f3f;
+void solve() {
   int n;
-  cin>>n;
-  vector<ll>t(n+1),c(n+1);
-  ll w=0;
-  for(int i=1;i<=n;++i){
-    cin>>t[i]>>c[i];
-    ++t[i];
-    w=max(t[i],w);
+  cin >> n;
+  vector<Item> a(n + 1);
+  int m = 0;
+  for (int i = 1; i <= n; ++i) {
+    cin >> a[i].t >> a[i].c;
+    ++a[i].t;
+    m = max(m, a[i].t);
   }
-  w+=n;
-  vector<ll>dp(w+1,1e16);
-  dp[0]=0;
-  for(int i=1;i<=n;++i){
-    for(int v=w;v>=t[i];--v){
-        dp[v]=min(dp[v],dp[v-t[i]]+c[i]);
+  m += n;
+  vector<int> dp(m + 1, INF);
+  dp[0] = 0;
+  for (int i = 1; i <= n; ++i) {
+    for (int j = m; j >= a[i].t; --j) {
+      dp[j] = min(dp[j], dp[j - a[i].t] + a[i].c);
     }
   }
-  ll ans=1e16;
-  for(int i=n;i<=w;++i){
-    ans=min(ans,dp[i]);
+  int ans = INT_MAX;
+  for (int i = n; i <= m; ++i) {
+    ans = min(ans, dp[i]);  
   }
-  cout<<ans<<'\n';
+  cout << ans << '\n';
   return;
 }
-int main(){
+int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
-  #ifdef LOCAL
-  freopen("/Users/xiangyanxin/code/Algorithom/in.txt","r",stdin);
-  freopen("/Users/xiangyanxin/code/Algorithom/out.txt","w",stdout);
-  #endif
-  int T=1;
-  while(T--){
+#ifdef LOCAL
+  freopen("/Users/xiangyanxin/code/Algorithom/in.txt", "r", stdin);
+  freopen("/Users/xiangyanxin/code/Algorithom/out.txt", "w", stdout);
+#endif
+  int T = 1;
+  while (T--) {
     solve();
   }
   return 0;

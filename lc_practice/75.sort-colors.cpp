@@ -11,13 +11,13 @@ class Solution {
 public:
     void sortColors(vector<int>& nums) {
       vector<int> cnt(3, 0);
-      for (const auto &c : nums) {
-        cnt[c]++;
-      }    
-      int cur = 0;
+      for (int i = 0; i < nums.size(); ++i) {
+        cnt[nums[i]]++;
+      }
+      int len = 0;
       for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < cnt[i]; ++j) {
-          nums[cur++] = i;
+          nums[len++] = i;
         }
       }
     }

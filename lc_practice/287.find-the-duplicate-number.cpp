@@ -17,27 +17,26 @@ public:
     
     */
     int findDuplicate(vector<int>& nums) {
-      int n = nums.size();
-      int l = 0, r = n - 1, ans = -1;
+      int l = 1, r = nums.size() - 1, ans = -1, n = nums.size();
       while (l <= r) {
         int m = (l + r) >> 1;
         int cnt = 0;
         for (int i = 0; i < n; ++i) {
-          cnt += nums[i] <= m;
+          cnt += nums[i] <= m;  
         }
         if (cnt > m) {
           ans = m;
-          r = m - 1;    
+          r = m - 1;
         } else {
           l = m + 1;
         }
-      } 
+      }
       return ans;
     }
 };
 // @lc code=end
 // int main() {
 //   Solution sol;
-//   vector<int> a = {1, 3, 4, 2, 2};
+//   vector<int> a = {3,1,3,4,2};
 //   sol.findDuplicate(a);
 // }
