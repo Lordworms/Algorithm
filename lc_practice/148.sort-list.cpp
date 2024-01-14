@@ -17,65 +17,70 @@
  */
 #include <bits/stdc++.h>
 using namespace std;
-struct ListNode {
-  int val;
-  ListNode *next;
-  ListNode() : val(0), next(nullptr) {}
-  ListNode(int x) : val(x), next(nullptr) {}
-  ListNode(int x, ListNode *next) : val(x), next(next) {}
-};
+// struct ListNode {
+//   int val;
+//   ListNode *next;
+//   ListNode() : val(0), next(nullptr) {}
+//   ListNode(int x) : val(x), next(nullptr) {}
+//   ListNode(int x, ListNode *next) : val(x), next(next) {}
+// };
 class Solution {
  public:
-  ListNode *sortList(ListNode *head) { return merge_sort(head, nullptr); }
-  ListNode *merge(ListNode *l, ListNode *r) {
-    ListNode *dum = new ListNode(0), *cur = dum, *L = l, *R = r;
-    while (L != nullptr && R != nullptr) {
-      if (L->val < R->val) {
-        cur->next = L;
-        L = L->next;
-      } else {
-        cur->next = R;
-        R = R->next;
-      }
-      cur = cur->next;
-    }
-    if (L != nullptr) {
-      cur->next = L;
-    } else if (R != nullptr) {
-      cur->next = R;
-    }
-    return dum->next;
+  ListNode *sortList(ListNode *head) { 
+    return merge_sort(head, nullptr); 
   }
-  ListNode *merge_sort(ListNode *head, ListNode *tail) {
-    if (head == nullptr) {
+  ListNode *merge_sort(ListNode *left, ListNode *right) {
+    if (left == nullptr) {
       return nullptr;
     }
-    if (head->next == tail) {
-      head->next = nullptr;
-      return head;
+    if (left->next == right) {
+      //most important
+      left->next = nullptr;
+      return left;
     }
-    ListNode *slow = head, *fast = head;
-    while (fast != tail) {
-      fast = fast->next;
+    ListNode *slow = left, *fast = left;
+    while (fast != right) {
       slow = slow->next;
-      if (fast != tail) {
+      fast = fast->next;
+      if (fast != right) {
         fast = fast->next;
       }
     }
     ListNode *mid = slow;
-    return merge(merge_sort(head, mid), merge_sort(mid, tail));
+    return merge(merge_sort(left, mid), merge_sort(mid, right));
+  }
+  ListNode* merge(ListNode *left, ListNode *right) {
+    ListNode *dum = new ListNode(0), *tmp = dum, *l = left, *r = right;
+    while (l != nullptr && r != nullptr) {
+      if (l->val < r->val) {
+        tmp->next = l;
+        l = l->next;
+      } else {
+        tmp->next = r;
+        r = r->next;
+      }
+      tmp = tmp->next;
+    }
+    if (l != nullptr) {
+      tmp->next = l;
+    }
+    if (r != nullptr) {
+      tmp->next = r;
+    }
+    return dum->next;
   }
 };
 // @lc code=end
-int main() {
-  vector<int> a = {4, 2, 1, 3};
-  vector<ListNode *> v(a.size());
-  for (int i = 0; i < a.size(); ++i) {
-    v[i] = new ListNode(a[i]);
-    if (i) {
-      v[i - 1]->next = v[i];
-    }
-  }
-  Solution sol;
-  sol.sortList(v[0]);
-}
+// int main() {
+//   vector<int> a = {4, 2, 1, 3};
+//   vector<ListNode *> v(a.size());
+//   for (int i = 0; i < a.size(); ++i) {
+//     v[i] = new ListNode(a[i]);
+//     if (i) {
+//       v[i - 1]->next = v[i];
+//     }
+//   }
+//   Solution sol;
+//   auto k = sol.sortList(v[0]);
+//   return 0;
+// }
