@@ -9,12 +9,13 @@
 using namespace std;
 class Trie {
 public:
-    static const int N = 3e4 + 10;
-    int tr[N][26];
-    int count[N * 26];
-    int cnt = 0;
+    vector<vector<int>> tr;
+    vector<int> count;
+    int cnt;
     Trie() {
-      
+      cnt = 0;
+      tr.resize(3e4 * 4, vector<int>(26));
+      count.resize(3e4 * 4);
     }
     
     void insert(string word) {
@@ -56,13 +57,13 @@ public:
  * bool param_3 = obj->startsWith(prefix);
  */
 // @lc code=end
-int main() {
-  Trie a;
-  a.insert("apple");
-  assert(a.search("apple") == true);
-  assert(a.search("app") == false);
-  assert(a.startsWith("app") == true);
-  a.insert("app");
-  assert(a.search("app") == true);
-}
+// int main() {
+//   Trie a;
+//   a.insert("apple");
+//   assert(a.search("apple") == true);
+//   assert(a.search("app") == false);
+//   assert(a.startsWith("app") == true);
+//   a.insert("app");
+//   assert(a.search("app") == true);
+// }
 
