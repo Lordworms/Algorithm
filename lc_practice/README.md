@@ -11,4 +11,5 @@ date|problem
 2024.1.15|[212](212.word-search-ii.cpp)|
 |2024.1.16|[224](224.basic-calculator.cpp)
 [284](284.peeking-iterator.cpp)]|
+|2024.1.17|[151](151.reverse-words-in-a-string.cpp) [174](174.dungeon-game.cpp)|
 -------
