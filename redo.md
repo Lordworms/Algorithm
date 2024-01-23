@@ -14,4 +14,4 @@ I think I have done enough problem so far (2024.1.13) from today I would review 
 |2024.1.16|[cf_633D](problem/constructive_problem/cf_633D.cpp) [cf_1015E2](problem/constructive_problem/cf_1015E2.cpp)| constructive problem|
 |2024.1.17|[cf_1015E2](problem/constructive_problem/cf_1015E2.cpp)|constructive problem|
 |2024.1.18|[cf_644B](problem/constructive_problem/cf_644B.cpp)|constructive problem|
-
+|2024.1.21|[cf_294B](problem/dp/bags/cf_294B.cpp) [cf_510D](problem/dp/bags/cf_294B.cpp) [cf_433A](problem/dp/bags/cf_294B.cpp)||
