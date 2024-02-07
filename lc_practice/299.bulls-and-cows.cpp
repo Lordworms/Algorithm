@@ -15,6 +15,7 @@ class Solution {
     for (int i = 0; i < secret.size(); ++i) {
       if (secret[i] == guess[i]) {
         ++bulls;
+        continue;
       }
       S[secret[i] - '0']++;
       G[guess[i] - '0']++;
