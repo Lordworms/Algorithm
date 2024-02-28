@@ -9,7 +9,6 @@ mkdir $base_dir_name
 problem_list=(
     A B C D E F
 )
-
 for var in ${problem_list[@]}
 do touch $base_dir_name$gang$var$suffix
 done

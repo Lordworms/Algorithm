@@ -15,13 +15,12 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-#include <bits/stdc++.h>
-using namespace std;
 class Solution {
 public:
-    ListNode* reverseList(ListNode* h) {
-      ListNode *cur = h, *pre = nullptr, *nxt;
-      while (cur != nullptr) {
+    ListNode* reverseList(ListNode* head) {
+      ListNode* pre = nullptr;
+      ListNode *cur = head, *nxt;
+      while (cur) {
         nxt = cur->next;
         cur->next = pre;
         pre = cur;
